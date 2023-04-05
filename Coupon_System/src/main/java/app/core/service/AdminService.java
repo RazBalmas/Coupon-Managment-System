@@ -243,18 +243,20 @@ public class AdminService extends ClientService{
 		else return 0;
 	}
 
-	public void updateCustomer(Customer customer) {
+	public void updateCustomer(Customer customer) throws CouponSystemException {
 		if (existsByCustomerEmail(customer.getEmail())) {
 			customer_repo.save(customer);
 		}
 
+		else throw new CouponSystemException();
 	}
 
-	public void deleteCustomer(int customerID) {
+	public void deleteCustomer(int customerID) throws CouponSystemException {
 		if (CustomerExistsById(customerID)) {
 			customer_repo.deleteById(customerID);
 		}
 
+		else throw new CouponSystemException();
 	}
 
 	public List<Customer> getAllCustomers() {

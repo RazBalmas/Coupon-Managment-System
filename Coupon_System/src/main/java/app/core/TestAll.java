@@ -22,7 +22,7 @@ import app.core.service.CustomerService;
 
 //Automatic testing when system loads.
 
-@Component
+//@Component
 public class TestAll implements CommandLineRunner {
 
 	private DataGenarator genarator = new DataGenarator();
