@@ -82,7 +82,7 @@ public class CustomerService extends ClientService{
 
 	public void updateCustomer(Customer customer) {
 		if (existsByCustomerEmail(customer.getEmail())) {
-			customer_repo.save(customer);
+			 customer_repo.save(customer);
 		}
 
 	}
