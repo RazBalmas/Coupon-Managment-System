@@ -30,7 +30,7 @@ public class Company extends User{
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.Password = password;
+		this.password = password;
 		this.coupons = new ArrayList<Coupon>(null);
 	}
 	@Id
@@ -43,7 +43,8 @@ public class Company extends User{
 	@Column(unique = true)
 	private String email;
 
-	private String Password;
+	@Column(name ="password")
+	private String password;
 	
 	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	@Nullable

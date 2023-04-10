@@ -22,16 +22,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public abstract class JwtUtilAbstract<T, ID> {
 
 	private String alg = SignatureAlgorithm.HS256.getJcaName();
-	@Value("${jwt.util.secret}")
-	private String secret;
+//	@Value("${jwt.util.secret}")
+	private final String secret = "aaaaaaaaa1aaaaaaaaa2aaaaaaaaa3aaaaaaaaa4aaa";
 
 	private Key key;
 
-	@Value("${jwt.util.chrono.unit}")
-	private String chronoUnit; // time units
+//	@Value("${jwt.util.chrono.unit}")
+	private final String chronoUnit = ChronoUnit.MINUTES.name(); // time units
 
-	@Value("${jwt.util.chrono.unit.number}")
-	private long unitNumber; // number of time units
+//	@Value("${jwt.util.chrono.unit.number}")
+	private final long unitNumber = 5; // number of time units
 
 	private JwtParser jwtParser;
 

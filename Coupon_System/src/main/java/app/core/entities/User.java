@@ -1,7 +1,7 @@
 package app.core.entities;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import app.core.loginManager.ClientType;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
+@Entity
 public class  User {
 	
 	@Id

@@ -39,6 +39,7 @@ public class Customer  extends User{
 	@Column(unique = true)
 	private String email;
 
+	@Column(name ="password")
 	private String password;
 
 	@ManyToMany (fetch = FetchType.EAGER)
