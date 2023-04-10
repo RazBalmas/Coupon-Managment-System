@@ -122,7 +122,7 @@ public class AdminController{
 		}
 	}
 	
-	@PutMapping("/deleteCoupon")
+	@DeleteMapping("/deleteCoupon")
 	public void deleteCoupon(@RequestParam int coupon_id) {
 		
 		try {

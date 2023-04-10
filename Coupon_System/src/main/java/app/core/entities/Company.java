@@ -14,7 +14,6 @@ import javax.persistence.OneToMany;
 
 import org.springframework.lang.Nullable;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,7 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode (of = "id")
 @Entity
-public class Company {
+public class Company extends User{
 
 	public Company (int id, String name, String email, String password) {
 		this.id = id;

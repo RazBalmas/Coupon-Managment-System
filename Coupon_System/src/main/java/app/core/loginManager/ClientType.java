@@ -1,6 +1,6 @@
 package app.core.loginManager;
 
-public enum Type {
+public enum ClientType {
 		ADMIN, COMPANY, CUSTOMER;
 	
 }

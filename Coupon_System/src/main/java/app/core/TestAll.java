@@ -14,7 +14,7 @@ import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.job.Job;
 import app.core.loginManager.LoginManager;
-import app.core.loginManager.Type;
+import app.core.loginManager.ClientType;
 import app.core.service.AdminService;
 import app.core.service.ClientService;
 import app.core.service.CompanyService;
@@ -54,7 +54,7 @@ public class TestAll implements CommandLineRunner {
 				System.out.println("======================================================");
 				System.out.println("=======================ADMIN TEST=====================");
 				
-				ClientService service = manager.login("admin@admin.com", "admin", Type.ADMIN);
+				ClientService service = manager.login("admin@admin.com", "admin", ClientType.ADMIN);
 				AdminService admin = (AdminService) service;
 				Company company = genarator.genarteRandomCompany();
 				System.out.println("=====================================================");
@@ -127,7 +127,7 @@ public class TestAll implements CommandLineRunner {
 				System.out.println("\n====================Company test=====================");
 				System.out.println("=====================================================");
 				System.out.println("========================Login========================");
-				service = manager.login(company.getEmail(), company.getPassword(), Type.COMPANY);
+				service = manager.login(company.getEmail(), company.getPassword(), ClientType.COMPANY);
 				CompanyService companyServ = (CompanyService) service;
 				System.out.println("Logged in sucsessfully!");
 				System.out.println("================Finding Company by ID================");
@@ -166,7 +166,7 @@ public class TestAll implements CommandLineRunner {
 				System.out.println("\n====================Customer test=====================");
 				System.out.println("=====================================================");
 				System.out.println("========================Login========================");
-				service = manager.login(customer.getEmail(), customer.getPassword(), Type.CUSTOMER);
+				service = manager.login(customer.getEmail(), customer.getPassword(), ClientType.CUSTOMER);
 				CustomerService customerServ = (CustomerService) service;
 				System.out.println("Customer logged in sucsessfully!");
 				System.out.println("=====================================================");

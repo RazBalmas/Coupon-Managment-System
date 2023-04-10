@@ -21,18 +21,18 @@ public class LoginManager {
 	private ApplicationContext ctx;
 
 	
-	public ClientService login(String email, String password, Type type) throws LoginException  {
+	public ClientService login(String email, String password, ClientType type) throws LoginException  {
 
-		if (type == Type.CUSTOMER) {
+		if (type == ClientType.CUSTOMER) {
 			CustomerService customerService = ctx.getBean(CustomerService.class);
 			return customerService;
 			
 		}
-		if (type == Type.COMPANY){
+		if (type == ClientType.COMPANY){
 			CompanyService companyService = ctx.getBean(CompanyService.class);
 			return companyService;
 		}
-		if(type == Type.ADMIN && admin.login(email, password)) {
+		if(type == ClientType.ADMIN && admin.login(email, password)) {
 			return this.admin;
 		}
 		else throw new LoginException("No such user found.");
