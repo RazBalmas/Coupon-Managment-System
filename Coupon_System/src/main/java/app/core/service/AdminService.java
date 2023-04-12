@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import app.core.entities.Admin;
 import app.core.entities.Catagory;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
@@ -27,9 +28,7 @@ import app.core.reposetories.CustomerRepo;
 //@Qualifier("AdminService")
 public class AdminService extends ClientService{
 
-	private final String usernme = "admin@admin.com"; 
-	private final String password = "admin"; 
-	
+	Admin admin = Admin.getAdmin();	
 	@Autowired
 	private CompanyRepo company_repo;
 	@Autowired
@@ -45,7 +44,7 @@ public class AdminService extends ClientService{
 	/////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean login(String email, String password) {
-		if (email == this.usernme && password == this.password) {
+		if (email == admin.getEmail() && password == admin.getPassword()) {
 			return true;
 		}
 		return false;
