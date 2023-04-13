@@ -53,6 +53,13 @@ public class Coupon {
 	@Enumerated(EnumType.STRING)
 	private Catagory catagory;
 	
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+	    name = "User_Coupons",
+	    joinColumns = @JoinColumn(name = "coupon_id"),
+	    inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private List<User> userList;
+	
 	@ManyToOne 
 	@JoinColumn (name = "Company_id", nullable = false)
 	private Company company;

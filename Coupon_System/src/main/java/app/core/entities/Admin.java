@@ -2,6 +2,8 @@ package app.core.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,16 +25,19 @@ public final class Admin extends User {
     @Column(unique = true)
 	private final String email = "admin@admin.com"; 
     
+    
+    @Column(unique = true)
 	private final String password = "admin";
+   
+    @Enumerated (EnumType.STRING)
 	private final ClientType clientType = ClientType.ADMIN;
+    
 
-	private static class getInstance {
+    private static final Admin instance = new Admin();
 		
-		private static final Admin instance = new Admin();
-			}
 	
 	public static Admin getAdmin() {
-		return getInstance.instance;
+		return instance;
 	}
 
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import app.core.loginManager.ClientType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,6 +44,9 @@ public class Customer  extends User{
 
 	@Column(name ="password")
 	private String password;
+	
+	@Enumerated (EnumType.STRING)
+	private final ClientType clientType = ClientType.CUSTOMER;
 
 	@ManyToMany (fetch = FetchType.EAGER)
 	@JoinTable(name = "Customer_Coupons", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "coupon_id"))

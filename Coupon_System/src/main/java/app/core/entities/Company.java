@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,7 @@ import javax.persistence.OneToMany;
 
 import org.springframework.lang.Nullable;
 
+import app.core.loginManager.ClientType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,7 +34,7 @@ public class Company extends User{
 		this.name = name;
 		this.email = email;
 		this.password = password;
-		this.coupons = new ArrayList<Coupon>(null);
+		this.coupons = new ArrayList<Coupon>();
 	}
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -45,6 +48,9 @@ public class Company extends User{
 
 	@Column(name ="password")
 	private String password;
+	
+	@Enumerated (EnumType.STRING)
+	private final ClientType clientType = ClientType.COMPANY;
 	
 	@OneToMany (cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	@Nullable
