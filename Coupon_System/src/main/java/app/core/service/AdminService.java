@@ -25,10 +25,10 @@ import app.core.reposetories.CustomerRepo;
 
 @Service
 @Transactional
-//@Qualifier("AdminService")
 public class AdminService extends ClientService{
 
-	Admin admin = Admin.getAdmin();	
+	
+	private Admin admin;	
 	@Autowired
 	private CompanyRepo company_repo;
 	@Autowired
@@ -45,6 +45,7 @@ public class AdminService extends ClientService{
 	@Override
 	public boolean login(String email, String password) {
 		if (email == admin.getEmail() && password == admin.getPassword()) {
+			this.admin = Admin.getAdmin();
 			return true;
 		}
 		return false;
