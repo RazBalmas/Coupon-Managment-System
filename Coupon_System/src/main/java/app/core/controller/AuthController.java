@@ -1,6 +1,5 @@
 package app.core.controller;
 
-import javax.security.auth.login.LoginException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import app.core.auth.UserCredentials;
 import app.core.entities.User;
+import app.core.exceptions.CouponSystemException;
+import app.core.exceptions.LoginException;
 import app.core.service.AuthService;
 
 @CrossOrigin
@@ -27,18 +28,18 @@ public class AuthController {
 	public String register(@RequestBody User user) {
 		try {
 			return this.authService.register(user);
-		} catch (LoginException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());}	
 	}
 
 	@PostMapping("/login")
 	public String login(@RequestBody UserCredentials userCredentials) {
 		try {
 			return this.authService.login(userCredentials);
-		} catch (LoginException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}
+	
 	}
 
+}
 }

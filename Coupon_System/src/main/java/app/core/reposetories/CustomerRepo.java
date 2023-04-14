@@ -12,13 +12,13 @@ import app.core.exceptions.CouponSystemException;
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
 //	boolean existsByCustomerEmail(int Id) throws CouponSystemException;
-//
+
 //	Customer findByCustomerEmail(String email) throws CouponSystemException;
-//
+
 //	public List<Coupon> getCustomerCoupons(int customerID) throws CouponSystemException;
-//	
+	
 //	void addCouponPurchase(int customerID, int couponID) throws CouponSystemException;
-//
+
 //	void deleteCouponPurchase(int customerID, int couponID) throws CouponSystemException;
 	
 }

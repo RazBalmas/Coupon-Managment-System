@@ -36,6 +36,9 @@ public class AdminService extends ClientService{
 	@Autowired
 	private CouponRepo coupon_repo;
 
+	public Admin getAdmin() {
+		return this.admin;
+	}
 	/////////////////////////////////////////////////////////////////////////////////
 
 //										Company

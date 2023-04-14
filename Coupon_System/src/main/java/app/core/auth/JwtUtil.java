@@ -23,62 +23,63 @@ import io.jsonwebtoken.JwtException;
 public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 
 	@Override
-	public String generateToken(User user) {
-		// create a map of all needed claims
+	public String generateAdminToken(Admin admin) {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("email", user.getEmail());
-		claims.put("clientType", user.getClientType());
-		claims.put("password", user.getPassword());
-		String userClientType = user.getClientType().name();
-
-		switch (userClientType) {
-
-		case "COMPANY":
-			claims.put("name", user.getName());
-			
-			List<Coupon> couponList = user.getCouponList();
-			if (couponList != null) {
-				Map<Integer, Coupon> couponMap = new HashMap<>();
-				for (Coupon coupon : couponList) { // converting List to a map
-					couponMap.put(coupon.getId(), coupon);
-				}
-				
-				Map<String, Object> couponClaims = new HashMap<>();
-				for (Map.Entry<Integer, Coupon> entry : couponMap.entrySet()) {
-					couponClaims.put(String.valueOf(entry.getKey()), entry.getValue());
-				}
-				claims.putAll(couponClaims);
-			}
-			String companytoken = this.createToken(claims, user.getId());
-			return companytoken;
-			
-
-					
-		case "CUSTOMER":
-			claims.put("first name", user.getFirstName());
-			claims.put("last name", user.getLastName());
-			List<Coupon> ownedCouponsList = user.getCouponList();
-			Map<Integer, Coupon> ownedCouponMap = new HashMap<>();
-			for (Coupon coupon : ownedCouponsList) { // converting List to a map
-				ownedCouponMap.put(coupon.getId(), coupon);
-			}
-
-			Map<String, Object> ownedCouponClaims = new HashMap<>();
-			for (Map.Entry<Integer, Coupon> entry : ownedCouponMap.entrySet()) {
-				ownedCouponClaims.put(String.valueOf(entry.getKey()), entry.getValue());
-			}
-			claims.putAll(ownedCouponClaims);
-			String customerToken = this.createToken(claims, user.getId());
-			return customerToken;
-
-		case "ADMIN":
-			String adminToken = this.createToken(claims, user.getId());
-			return adminToken;
-		}
-		throw new JwtException("Bad request, type undefined");
-
-		
+		claims.put("email", admin.getEmail());
+		claims.put("clientType", admin.getClientType());
+		claims.put("password", admin.getPassword());
+		String adminToken = this.createToken(claims, admin.getId());
+		return adminToken;
 	}
+	@Override
+	public String generateCustomerToken(Customer customer) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("email", customer.getEmail());
+		claims.put("clientType", customer.getClientType());
+		claims.put("password", customer.getPassword());
+		
+		claims.put("first name", customer.getFirstName());
+		claims.put("last name", customer.getLastName());
+		List<Coupon> ownedCouponsList = customer.getOwned_coupons();
+		Map<Integer, Coupon> ownedCouponMap = new HashMap<>();
+		for (Coupon coupon : ownedCouponsList) { // converting List to a map
+			ownedCouponMap.put(coupon.getId(), coupon);
+		}
+	
+		Map<String, Object> ownedCouponClaims = new HashMap<>();
+		for (Map.Entry<Integer, Coupon> entry : ownedCouponMap.entrySet()) {
+			ownedCouponClaims.put(String.valueOf(entry.getKey()), entry.getValue());
+		}
+		claims.putAll(ownedCouponClaims);
+		String customerToken = this.createToken(claims, customer.getId());
+		return customerToken;
+	}
+	@Override
+	public String generateCompanyToken(Company company) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put("email", company.getEmail());
+		claims.put("clientType", company.getClientType());
+		claims.put("password", company.getPassword());
+		claims.put("name", company.getName());
+		
+		List<Coupon> couponList = company.getCoupons();
+		if (couponList != null) {
+			Map<Integer, Coupon> couponMap = new HashMap<>();
+			for (Coupon coupon : couponList) { // converting List to a map
+				couponMap.put(coupon.getId(), coupon);
+			}
+			
+			Map<String, Object> couponClaims = new HashMap<>();
+			for (Map.Entry<Integer, Coupon> entry : couponMap.entrySet()) {
+				couponClaims.put(String.valueOf(entry.getKey()), entry.getValue());
+			}
+			claims.putAll(couponClaims);
+		}
+		String companytoken = this.createToken(claims, company.getId());
+		return companytoken;
+			}
+	
+	
 
 	@Override
 	public User extractUser(String token) throws JwtException {
@@ -89,7 +90,9 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 		switch (userClientType) {
 
 		case "COMPANY":
-			return extractCompany(token);
+			Company company = extractCompany(token);
+			return company;
+			
 
 		case "CUSTOMER":
 
@@ -106,7 +109,7 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 	
 	
 	
-	private Company extractCompany(String token) {
+	public Company extractCompany(String token) {
 		Claims claims = this.extractAllClaims(token);
 		int id = Integer.parseInt(claims.getSubject());
 		String email = claims.get("email", String.class);
@@ -130,7 +133,7 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 
 	}
 
-	private Customer extractCustomer(String token) {
+	public Customer extractCustomer(String token) {
 		Claims claims = this.extractAllClaims(token);
 		int id = Integer.parseInt(claims.getSubject());
 		String email = claims.get("email", String.class);
@@ -153,6 +156,11 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 		}
 		return customer;
 
+	}
+	@Override
+	public Admin extractAdmin(String token) throws JwtException {
+		Admin admin = Admin.getAdmin();
+		return admin;
 	}
 
 }

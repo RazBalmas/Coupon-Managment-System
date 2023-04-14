@@ -12,6 +12,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import app.core.entities.Admin;
+import app.core.entities.Company;
+import app.core.entities.Customer;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -41,7 +44,7 @@ public abstract class JwtUtilAbstract<T, ID> {
 		jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
 	}
 
-	public abstract String generateToken(T user);
+	
 
 	protected String createToken(Map<String, Object> claims, ID id) {
 
@@ -67,10 +70,19 @@ public abstract class JwtUtilAbstract<T, ID> {
 	}
 
 	public abstract T extractUser(String token) throws JwtException;
+	public abstract T extractAdmin(String token) throws JwtException;
+	public abstract T extractCompany(String token) throws JwtException;
+	public abstract T extractCustomer(String token) throws JwtException;
 
 	protected Claims extractAllClaims(String token) throws JwtException {
 		Jws<Claims> jwt = this.jwtParser.parseClaimsJws(token);
 		return jwt.getBody();
 	}
+
+	public abstract String generateCompanyToken(Company company);
+
+	public abstract String generateCustomerToken(Customer customer);
+
+	public abstract String generateAdminToken(Admin admin);
 
 }

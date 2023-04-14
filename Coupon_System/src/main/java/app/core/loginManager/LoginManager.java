@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import app.core.auth.UserCredentials;
 import app.core.exceptions.CouponSystemException;
 import app.core.exceptions.LoginException;
 import app.core.service.AdminService;
@@ -21,18 +22,18 @@ public class LoginManager {
 	private ApplicationContext ctx;
 
 	
-	public ClientService login(String email, String password, ClientType type) throws LoginException  {
+	public ClientService login(UserCredentials userCredentials) throws LoginException  {
 
-		if (type == ClientType.CUSTOMER) {
+		if (userCredentials.getClientType() == ClientType.CUSTOMER) {
 			CustomerService customerService = ctx.getBean(CustomerService.class);
 			return customerService;
 			
 		}
-		if (type == ClientType.COMPANY){
+		if (userCredentials.getClientType()  == ClientType.COMPANY){
 			CompanyService companyService = ctx.getBean(CompanyService.class);
 			return companyService;
 		}
-		if(type == ClientType.ADMIN && admin.login(email, password)) {
+		if(userCredentials.getClientType()  == ClientType.ADMIN && admin.login(userCredentials.getEmail(), userCredentials.getPassword())) {
 			return this.admin;
 		}
 		else throw new LoginException("No such user found.");
