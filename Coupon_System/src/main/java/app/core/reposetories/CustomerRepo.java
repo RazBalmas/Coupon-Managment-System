@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
-
+@Repository
 public interface CustomerRepo extends JpaRepository<Customer, Integer> {
 
 //	boolean existsByCustomerEmail(int Id) throws CouponSystemException;

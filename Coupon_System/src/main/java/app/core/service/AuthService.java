@@ -15,7 +15,6 @@ import app.core.entities.User;
 import app.core.exceptions.CouponSystemException;
 import app.core.exceptions.LoginException;
 import app.core.loginManager.ClientType;
-import app.core.loginManager.LoginManager;
 import app.core.reposetories.*;
 
 @Service
@@ -25,19 +24,16 @@ public class AuthService {
 	@Autowired
 	private JwtUtil jwtUtil;
 	@Autowired
-	private LoginManager loginManager;
-	@Autowired
 	private CompanyRepo companyRepo;
 	@Autowired
 	private CustomerRepo customerRepo;
-	@Autowired
-	private UserRepo userRepo;
+
 
 	public String register(User user) throws LoginException {
 		if (user.getClientType() == ClientType.COMPANY) {
 			Company company = userToCompany(user);
 			companyRepo.save(company);
-			company = this.companyRepo.save(company);
+			company = companyRepo.save(company);
 			String token = this.jwtUtil.generateCompanyToken(company);
 			return token;
 					}
@@ -45,7 +41,7 @@ public class AuthService {
 			Customer customer  = userToCustomer(user);
 			customerRepo.save(customer);
 			customerRepo.save(customer);
-			customer = this.customerRepo.save(customer);
+			customer = customerRepo.save(customer);
 			String token = this.jwtUtil.generateCustomerToken(customer);
 			return token;
 		}
@@ -54,36 +50,32 @@ public class AuthService {
 	}
 
 	public String login(UserCredentials userCredentials) throws CouponSystemException {
-		if (userCredentials.getClientType() ==ClientType.ADMIN ) {
-			ClientService clientService = loginManager.login(userCredentials);
-				if(clientService != null && clientService instanceof AdminService) {
-					AdminService adminService = (AdminService) clientService;
+		if (userCredentials.getClientType() == ClientType.ADMIN ) {
+					AdminService adminService = new AdminService();
 					if(adminService.login(userCredentials.getEmail(), userCredentials.getPassword())) {
-						Admin admin = adminService.getAdmin();
+						Admin admin = Admin.getAdmin();
 						return this.jwtUtil.generateAdminToken(admin);
 					}
 				}
-		}
+		
 		if (userCredentials.getClientType() ==ClientType.COMPANY ) {
-			ClientService clientService = loginManager.login(userCredentials);
-			if(clientService != null && clientService instanceof CompanyService) {
-				CompanyService companyService = (CompanyService) clientService;
+							CompanyService companyService = new CompanyService();
 				if(companyService.login(userCredentials.getEmail(), userCredentials.getPassword())) {
-					Company company = companyRepo.findByEmail(userCredentials.getEmail());
+					Company company = companyService.findByCompanyEmail(userCredentials.getEmail());
 					return this.jwtUtil.generateCompanyToken(company);
 				}
-			}
+			
 		}
+		
+		
 		if (userCredentials.getClientType() ==ClientType.CUSTOMER ) {
-			ClientService clientService = loginManager.login(userCredentials);
-			if(clientService != null && clientService instanceof CustomerService) {
-				CustomerService customerService = (CustomerService) clientService;
+				CustomerService customerService = new CustomerService();
 				if(customerService.login(userCredentials.getEmail(), userCredentials.getPassword())) {
 					Customer customer = customerService.findByCustomerEmail(userCredentials.getEmail());
 					return this.jwtUtil.generateCustomerToken(customer);
 				}
 			}
-		}
+		
 		
 			throw new LoginException("loging failed - wrong role");
 		}

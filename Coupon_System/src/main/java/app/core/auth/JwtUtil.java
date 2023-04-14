@@ -42,6 +42,7 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 		claims.put("last name", customer.getLastName());
 		List<Coupon> ownedCouponsList = customer.getOwned_coupons();
 		Map<Integer, Coupon> ownedCouponMap = new HashMap<>();
+		if (ownedCouponsList !=null) {
 		for (Coupon coupon : ownedCouponsList) { // converting List to a map
 			ownedCouponMap.put(coupon.getId(), coupon);
 		}
@@ -51,6 +52,7 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 			ownedCouponClaims.put(String.valueOf(entry.getKey()), entry.getValue());
 		}
 		claims.putAll(ownedCouponClaims);
+		}
 		String customerToken = this.createToken(claims, customer.getId());
 		return customerToken;
 	}

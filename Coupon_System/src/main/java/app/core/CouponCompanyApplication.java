@@ -9,9 +9,6 @@ public class CouponCompanyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CouponCompanyApplication.class, args);
 	
-		 
-		
-		
 	}
 
 }

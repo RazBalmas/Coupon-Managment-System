@@ -28,17 +28,13 @@ import app.core.reposetories.CustomerRepo;
 public class AdminService extends ClientService{
 
 	
-	private Admin admin;	
+	private Admin admin= Admin.getAdmin();
 	@Autowired
 	private CompanyRepo company_repo;
 	@Autowired
 	private CustomerRepo customer_repo;
 	@Autowired
 	private CouponRepo coupon_repo;
-
-	public Admin getAdmin() {
-		return this.admin;
-	}
 	/////////////////////////////////////////////////////////////////////////////////
 
 //										Company
@@ -47,8 +43,7 @@ public class AdminService extends ClientService{
 	/////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean login(String email, String password) {
-		if (email == admin.getEmail() && password == admin.getPassword()) {
-			this.admin = Admin.getAdmin();
+		if (email.equals(admin.getEmail()) && password.equals(admin.getPassword())) {
 			return true;
 		}
 		return false;

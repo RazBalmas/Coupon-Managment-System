@@ -14,6 +14,8 @@ import app.core.auth.UserCredentials;
 import app.core.entities.User;
 import app.core.exceptions.CouponSystemException;
 import app.core.exceptions.LoginException;
+import app.core.reposetories.CompanyRepo;
+import app.core.reposetories.CustomerRepo;
 import app.core.service.AuthService;
 
 @CrossOrigin
@@ -23,6 +25,11 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+	@Autowired
+	private CompanyRepo companyRepo;
+	@Autowired
+	private CustomerRepo customerRepo;
+
 
 	@PostMapping("/register")
 	public String register(@RequestBody User user) {
