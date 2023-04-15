@@ -11,6 +11,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import app.core.loginManager.ClientType;
 import lombok.AllArgsConstructor;

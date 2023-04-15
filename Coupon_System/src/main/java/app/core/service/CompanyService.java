@@ -45,7 +45,7 @@ public class CompanyService extends ClientService{
 	@Override
 	public boolean login(String email, String password) {
 		try {
-			if (findByCompanyEmail(email).getPassword() == password) {
+			if (findByCompanyEmail(email).getPassword().equals(password)) {
 				this.id = findByCompanyEmail(email).getId();
 				return true;
 			}
@@ -57,12 +57,12 @@ public class CompanyService extends ClientService{
 	public boolean companyExistsById(int id) throws CouponSystemException {
 		if (company_repo.existsById(id)) {
 			return true;
-		}
+		}		
 		return false;
 	}
 
 	public boolean companyExistsByEmail(String email) throws CouponSystemException {
-		if (company_repo.existsByEmail(email)) {
+		if (this.company_repo.existsByEmail(email)) {
 			return true;
 		}
 		return false;

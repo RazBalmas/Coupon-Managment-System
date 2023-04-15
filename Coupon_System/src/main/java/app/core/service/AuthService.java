@@ -84,15 +84,18 @@ public class AuthService {
 	
 	private Company userToCompany(User user) {
 		
-		Company company = new Company(0,null, user.getEmail(), user.getPassword());
+		Company company = new Company();
+		company.setEmail(user.getEmail());
+		company.setPassword(user.getPassword());
 			return company;
 	
 	}
 
 	private Customer userToCustomer(User user) {
 		
-		Customer customer = new Customer(0,null, null, user.getEmail(), user.getPassword(), null);
-		
+		Customer customer = new Customer();
+		customer.setEmail(user.getEmail());
+		customer.setPassword(user.getPassword());
 		return customer;
 			
 	}

@@ -28,13 +28,15 @@ import app.core.reposetories.CustomerRepo;
 public class AdminService extends ClientService{
 
 	
-	private Admin admin= Admin.getAdmin();
 	@Autowired
 	private CompanyRepo company_repo;
 	@Autowired
 	private CustomerRepo customer_repo;
 	@Autowired
 	private CouponRepo coupon_repo;
+
+	private Admin admin= Admin.getAdmin();
+    
 	/////////////////////////////////////////////////////////////////////////////////
 
 //										Company

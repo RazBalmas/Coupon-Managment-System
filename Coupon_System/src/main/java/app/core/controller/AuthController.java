@@ -25,10 +25,8 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
-	@Autowired
-	private CompanyRepo companyRepo;
-	@Autowired
-	private CustomerRepo customerRepo;
+
+	
 
 
 	@PostMapping("/register")
