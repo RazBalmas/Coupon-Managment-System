@@ -2,6 +2,7 @@ package app.core.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +30,7 @@ public class AuthController {
 	
 
 
-	@PostMapping("/register")
+	@PostMapping(path ="/register")
 	public String register(@RequestBody User user) {
 		try {
 			return this.authService.register(user);
@@ -37,7 +38,7 @@ public class AuthController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());}	
 	}
 
-	@PostMapping("/login")
+	@PostMapping(path ="/login")
 	public String login(@RequestBody UserCredentials userCredentials) {
 		try {
 			return this.authService.login(userCredentials);

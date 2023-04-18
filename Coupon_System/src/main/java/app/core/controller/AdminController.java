@@ -2,7 +2,9 @@ package app.core.controller;
 
 import java.util.List;
 
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +30,7 @@ public class AdminController{
 	@Autowired
 	public AdminService adminService;
 
-	@GetMapping("/companyExistsById")
+	@GetMapping(path = "/companyExistsById", headers = HttpHeaders.AUTHORIZATION)
 	public boolean companyExistsById(int id) {
 	
 		try {
@@ -38,7 +40,7 @@ public class AdminController{
 		}
 	}
 	
-	@GetMapping("/companyExistsByEmail")
+	@GetMapping(path = "/companyExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
 	public boolean companyExistsByEmail(@RequestParam String email) {
 		try {
 		return (adminService.companyExistsByEmail(email));
@@ -48,7 +50,7 @@ public class AdminController{
 			}}
 	
 	
-	@PostMapping("/addCompany")
+	@PostMapping(path = "/addCompany",headers = HttpHeaders.AUTHORIZATION)
 	public int addCompany(@RequestBody Company company) {
 		try {
 			return (adminService.addCompany(company));
@@ -57,7 +59,7 @@ public class AdminController{
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 				}}
 	
-	@PutMapping("/updateCompany")
+	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCompany(@RequestBody Company company) {
 		try {
 			adminService.updateCompany(company);
@@ -66,7 +68,7 @@ public class AdminController{
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());		
 		}}
 	
-	@DeleteMapping("/deleteCompany")
+	@DeleteMapping(path = "/deleteCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCompany(@RequestParam int companyId) {
 		try {
 		 adminService.deleteCompany(companyId);
@@ -75,14 +77,14 @@ public class AdminController{
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());		
 		}}
 
-	@GetMapping("/getAllCompany")
+	@GetMapping(path ="/getAllCompany", headers = HttpHeaders.AUTHORIZATION)
 	public List<Company> getAllCompanies() {
 		List<Company> companies = adminService.getAllCompanies();
 		System.out.println(companies.toString());
 		return companies;
 	}
 	
-	@GetMapping("/getCompanyById")
+	@GetMapping(path ="/getCompanyById", headers = HttpHeaders.AUTHORIZATION)
 	public Company findByCompanyId(@RequestParam int id) {
 		
 		try {
@@ -92,7 +94,7 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping("/getCompanyByEmail")
+	@GetMapping(path ="/getCompanyByEmail", headers = HttpHeaders.AUTHORIZATION)
 	public Company findByCompanyEmailCompany (@RequestParam String email) {
 		
 		try {
@@ -102,7 +104,7 @@ public class AdminController{
 		}
 	}
 	
-	@PostMapping("/addCoupon")
+	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public void addCoupon(@RequestBody Coupon coupon) {
 		
 		try {
@@ -112,7 +114,7 @@ public class AdminController{
 		}
 	}
 
-	@PutMapping("/updateCoupon")
+	@PutMapping(path = "/updateCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCoupon(@RequestBody Coupon coupon) {
 		
 		try {
@@ -122,7 +124,7 @@ public class AdminController{
 		}
 	}
 	
-	@DeleteMapping("/deleteCoupon")
+	@DeleteMapping(path ="/deleteCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCoupon(@RequestParam int coupon_id) {
 		
 		try {
@@ -132,7 +134,7 @@ public class AdminController{
 		}
 	}
 	
-	@GetMapping("/CouponsByCompanyId")
+	@GetMapping(path = "/CouponsByCompanyId", headers = HttpHeaders.AUTHORIZATION)
 	public  List<Coupon> findCouponsByCompany_Id(@RequestParam int company_id) {
 		
 		try {
@@ -142,7 +144,7 @@ public class AdminController{
 		}
 	}
 	
-	@GetMapping("/CouponById")
+	@GetMapping(path ="/CouponById",headers = HttpHeaders.AUTHORIZATION)
 	public Coupon findByCouponId(int coupon_id) {
 		try {
 			return (adminService.findByCouponId(coupon_id));
@@ -151,7 +153,7 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping("/CouponByTitle")
+	@GetMapping(path ="/CouponByTitle", headers = HttpHeaders.AUTHORIZATION)
 	public Coupon findCouponByTitle(String title)  {
 		 Coupon coupon = adminService.findCouponByTitle(title);
 		 if (coupon != null) {
@@ -162,13 +164,13 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping("/allCoupons")
+	@GetMapping(path ="/allCoupons", headers = HttpHeaders.AUTHORIZATION)
 	public  List<Coupon> getAllCoupons() {
 		return adminService.getAllCoupons();
 		}
 	
 	
-	@GetMapping("/customerExistsById")
+	@GetMapping(path ="/customerExistsById", headers = HttpHeaders.AUTHORIZATION)
 	public boolean CustomerExistsById(@RequestParam int Id) {
 		try {
 			return (adminService.companyExistsById(Id));
@@ -177,7 +179,7 @@ public class AdminController{
 		}
 	}
 	
-	@GetMapping("/customerExistsByEmail")
+	@GetMapping(path ="/customerExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
 	public boolean existsByCustomerEmail(@RequestParam String email) {
 		try {
 			return (adminService.companyExistsByEmail(email));
@@ -186,7 +188,7 @@ public class AdminController{
 		}
 		}
 		
-	@PostMapping("/addCustomer")
+	@PostMapping(path ="/addCustomer", headers = HttpHeaders.AUTHORIZATION)
 		public int addCustomer(@RequestBody Customer customer) {
 				int customerId = adminService.addCustomer(customer);
 				if (customerId == 0) {
@@ -197,7 +199,7 @@ public class AdminController{
 		
 	}
 	
-	@PutMapping("/updateCustomer")
+	@PutMapping(path ="/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCustomer(@RequestBody Customer customer) {
 		try {
 			adminService.updateCustomer(customer);
@@ -207,7 +209,7 @@ public class AdminController{
 	}
 	
 	
-	@DeleteMapping("/deleteCustomer")
+	@DeleteMapping(path ="/deleteCustomer", headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCustomer(@RequestParam int customerID) {
 		try {
 			adminService.deleteCustomer(customerID);
@@ -216,12 +218,12 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping("/allCustomers")
+	@GetMapping(path ="/allCustomers", headers = HttpHeaders.AUTHORIZATION)
 	public List<Customer> getAllCustomers() {
 			return adminService.getAllCustomers();
 	}
 	
-	@GetMapping("/customerById")
+	@GetMapping(path ="/customerById", headers = HttpHeaders.AUTHORIZATION)
 	public Customer findByCustomerId(@RequestParam int customerID){
 		try {
 			return adminService.findByCustomerId(customerID);
@@ -230,7 +232,7 @@ public class AdminController{
 		}
 	}
 	
-	@GetMapping("/customerByEmail")
+	@GetMapping(path ="/customerByEmail", headers = HttpHeaders.AUTHORIZATION)
 	public  Customer findByCustomerEmail(@RequestParam String email){
 		try {
 			return adminService.findByCustomerEmail(email);
@@ -239,7 +241,7 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping("/customerCoupons")
+	@GetMapping(path ="/customerCoupons", headers = HttpHeaders.AUTHORIZATION)
 	public List<Coupon> getCustomerCoupons(int customerID){
 		try {
 			return adminService.getCustomerCoupons(customerID);
@@ -248,7 +250,7 @@ public class AdminController{
 		}
 	}
 	
-	@PostMapping("/addPurches")
+	@PostMapping(path = "/addPurches", headers = HttpHeaders.AUTHORIZATION)
 	public void addCouponPurchase(@RequestParam int customerID,@RequestParam int couponID) {
 		try {
 		 adminService.addCouponPurchase(customerID, couponID);
@@ -257,7 +259,7 @@ public class AdminController{
 		}
 	}
 	
-	@DeleteMapping("/deletePurches")
+	@DeleteMapping(path = "/deletePurches", headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCouponPurchase(int customerID, int couponID) {
 		try {
 			adminService.deleteCouponPurchase(customerID, couponID);

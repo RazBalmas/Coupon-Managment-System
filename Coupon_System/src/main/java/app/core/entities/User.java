@@ -30,15 +30,15 @@ public class User {
 	private String email;
 	private String password;
 	
-	@Nullable
-	private String name;
-	@Nullable
-	private String firstName;
-	@Nullable
-	private String lastName;	
-	@Nullable
-	@ManyToMany(mappedBy = "userList")
-	private List<Coupon> couponList;
+//	@Nullable
+//	private String name;
+//	@Nullable
+//	private String firstName;
+//	@Nullable
+//	private String lastName;	
+//	@Nullable
+//	@ManyToMany(mappedBy = "userList")
+//	private List<Coupon> couponList;
 	@Enumerated(EnumType.STRING)
 	private ClientType clientType;
 	

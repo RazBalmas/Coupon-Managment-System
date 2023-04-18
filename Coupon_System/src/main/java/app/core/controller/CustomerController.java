@@ -3,6 +3,7 @@ package app.core.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class CustomerController{
 	@Autowired
 	public CouponService couponService;
 		
-	@PostMapping("/addCustomer")
+	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
 		public int addCustomer(@RequestBody Customer customer) {
 				int customerId = customerService.addCustomer(customer);
 				if (customerId == 0) {
@@ -40,14 +41,14 @@ public class CustomerController{
 					}
 	
 	
-	@PutMapping("/updateCustomer")
+	@PutMapping(path ="/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCustomer(@RequestBody Customer customer) {
 			customerService.updateCustomer(customer);
 		
 	}
 	
 
-	@GetMapping("/customerCoupons")
+	@GetMapping(path ="/customerCoupons", headers = HttpHeaders.AUTHORIZATION)
 	public List<Coupon> getCustomerCoupons(int customerID){
 
 			try {
@@ -57,7 +58,7 @@ public class CustomerController{
 			}
 			}
 	
-	@PostMapping("/addPurches")
+	@PostMapping(path = "/addPurches", headers = HttpHeaders.AUTHORIZATION)
 	public void addCouponPurchase(@RequestParam int customerID,@RequestParam int couponID) {
 		try {
 		 customerService.addCouponPurchase(customerID, couponID);
@@ -66,7 +67,7 @@ public class CustomerController{
 		}
 	}
 	
-	@DeleteMapping("/deletePurches")
+	@DeleteMapping(path ="/deletePurches", headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCouponPurchase(@RequestParam int customerID,@RequestParam int couponID) {
 		try {
 			customerService.deleteCouponPurchase(customerID, couponID);
@@ -75,7 +76,7 @@ public class CustomerController{
 		}
 	}
 	
-	@GetMapping("/findCouponById")
+	@GetMapping(path ="/findCouponById", headers = HttpHeaders.AUTHORIZATION)
 	public Coupon findByCouponId(@RequestParam int coupon_id){
 		
 		try {
@@ -85,12 +86,12 @@ public class CustomerController{
 		}
 	}
 	
-	@GetMapping("/findCouponByCatagory")
+	@GetMapping(path ="/findCouponByCatagory", headers = HttpHeaders.AUTHORIZATION)
 	public List<Coupon> findCouponByCatagory(@PathVariable Catagory catagory){
 			return couponService.findCouponByCatagory(catagory);
 		} 
 
-	@GetMapping("/allCoupons")
+	@GetMapping(path ="/allCoupons", headers = HttpHeaders.AUTHORIZATION)
 	public List<Coupon> getAllCoupons(){
 		return couponService.getAllCoupons();
 	} 

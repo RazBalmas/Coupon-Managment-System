@@ -1,27 +1,20 @@
 package app.core.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import app.core.entities.Catagory;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
-import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.reposetories.CompanyRepo;
 import app.core.reposetories.CouponRepo;
-import app.core.reposetories.CustomerRepo;
 
 @Service
 @Scope("prototype")

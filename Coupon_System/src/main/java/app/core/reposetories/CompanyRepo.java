@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import app.core.entities.Company;
 import app.core.exceptions.CouponSystemException;
 
-@Component
 
 public interface CompanyRepo extends JpaRepository<Company, Integer> {
 

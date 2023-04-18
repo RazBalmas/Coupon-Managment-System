@@ -60,7 +60,7 @@ public class Coupon {
 	    inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private List<User> userList;
 	
-	@ManyToOne 
+	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn (name = "Company_id", nullable = false)
 	private Company company;
 	
@@ -71,6 +71,9 @@ public class Coupon {
 			inverseJoinColumns = @JoinColumn(name = "customer_id")
 			)
 	private List<Customer> customers;
+	
+	
+	
 	
 	public void setCustomers(Customer customer) {
 		if ( customer == null) {

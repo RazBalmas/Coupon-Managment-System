@@ -3,6 +3,7 @@ package app.core.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class CompanyController {
 	@Autowired
 	public CompanyService companyService;
 
-	@PutMapping("/updateCompany")
+	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCompany(@RequestBody Company company) {
 		try {
 			companyService.updateCompany(company);
@@ -34,7 +35,7 @@ public class CompanyController {
 		}
 	}
 
-	@PostMapping("/addCoupon")
+	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public int addCoupon(@RequestBody Coupon coupon)  {
 		try {
 			return companyService.addCoupon(coupon);
@@ -43,7 +44,7 @@ public class CompanyController {
 		}
 	}
 	
-	@PutMapping("/updateCoupon")
+	@PutMapping(path ="/updateCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCoupon(@RequestParam Coupon coupon) {
 		try {
 			companyService.updateCoupon(coupon);
@@ -52,7 +53,7 @@ public class CompanyController {
 		}
 	}
 	
-	@DeleteMapping("/deleteCoupon")
+	@DeleteMapping(path = "/deleteCoupon" , headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCoupon(@RequestParam int coupon_id) {
 		try {
 			companyService.deleteCoupon(coupon_id);
@@ -62,7 +63,7 @@ public class CompanyController {
 	}
 
 	
-	@GetMapping("/allMyCoupons")
+	@GetMapping(path ="/allMyCoupons", headers = HttpHeaders.AUTHORIZATION)
 	public List<Coupon> findCouponsByCompany_Id(@RequestParam int company_id) {
 		try {
 			return (companyService.findCouponsByCompany_Id(company_id));

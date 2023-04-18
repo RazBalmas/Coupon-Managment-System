@@ -27,6 +27,12 @@ public class AuthService {
 	private CompanyRepo companyRepo;
 	@Autowired
 	private CustomerRepo customerRepo;
+	@Autowired
+	private CompanyService companyService;
+	@Autowired
+	private AdminService adminService;
+	@Autowired
+	private CustomerService customerService;
 
 
 	public String register(User user) throws LoginException {
@@ -51,7 +57,6 @@ public class AuthService {
 
 	public String login(UserCredentials userCredentials) throws CouponSystemException {
 		if (userCredentials.getClientType() == ClientType.ADMIN ) {
-					AdminService adminService = new AdminService();
 					if(adminService.login(userCredentials.getEmail(), userCredentials.getPassword())) {
 						Admin admin = Admin.getAdmin();
 						return this.jwtUtil.generateAdminToken(admin);
@@ -59,7 +64,6 @@ public class AuthService {
 				}
 		
 		if (userCredentials.getClientType() ==ClientType.COMPANY ) {
-							CompanyService companyService = new CompanyService();
 				if(companyService.login(userCredentials.getEmail(), userCredentials.getPassword())) {
 					Company company = companyService.findByCompanyEmail(userCredentials.getEmail());
 					return this.jwtUtil.generateCompanyToken(company);
@@ -69,7 +73,6 @@ public class AuthService {
 		
 		
 		if (userCredentials.getClientType() ==ClientType.CUSTOMER ) {
-				CustomerService customerService = new CustomerService();
 				if(customerService.login(userCredentials.getEmail(), userCredentials.getPassword())) {
 					Customer customer = customerService.findByCustomerEmail(userCredentials.getEmail());
 					return this.jwtUtil.generateCustomerToken(customer);
