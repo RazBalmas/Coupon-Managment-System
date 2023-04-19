@@ -77,7 +77,7 @@ public class CouponService {
 		List<Coupon> allCoupons = coupon_repo.findAll();
 		List<Coupon> couponsByCatagory = coupon_repo.findAll();
 		for (Coupon coupon : allCoupons) {
-			if (coupon.getCatagory() == catagory) {
+			if (coupon.getCatagory().equals(catagory)) {
 				couponsByCatagory.add(coupon);
 			}
 		}

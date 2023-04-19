@@ -41,8 +41,8 @@ public class CouponCompanyApplication {
 	}
 
 	@Bean
-	FilterRegistrationBean<AuthorizationFilter> authorizationFilter() {
-		AuthorizationFilter authorizationFilter = new AuthorizationFilter();
+	FilterRegistrationBean<AuthorizationFilter> authorizationFilter(JwtUtil jwtUtil) {
+		AuthorizationFilter authorizationFilter = new AuthorizationFilter(jwtUtil);
 		FilterRegistrationBean<AuthorizationFilter> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(authorizationFilter);
 		registrationBean.addUrlPatterns("/api/admin/*", "/api/company/*", "/api/customer/*");

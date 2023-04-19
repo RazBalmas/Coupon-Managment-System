@@ -228,7 +228,7 @@ public class AdminService extends ClientService{
 	public boolean existsByCustomerEmail(String email) {
 		List<Customer> allCustomers = customer_repo.findAll();
 		for (Customer customer : allCustomers) {
-			if (customer.getEmail() == email) {
+			if (customer.getEmail().equals(email)) {
 				return true;
 			}
 		}
@@ -275,7 +275,7 @@ public class AdminService extends ClientService{
 	public Customer findByCustomerEmail(String email) throws CouponSystemException {
 		List<Customer> allCustomer = customer_repo.findAll();
 		for (Customer customer : allCustomer) {
-			if (customer.getEmail() == email) {
+			if (customer.getEmail().equals(email)) {
 				return customer;
 			}
 		}

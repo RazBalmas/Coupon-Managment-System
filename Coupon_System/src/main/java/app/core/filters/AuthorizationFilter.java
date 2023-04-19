@@ -1,6 +1,7 @@
 package app.core.filters;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,10 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 
+import app.core.auth.JwtUtil;
 import app.core.entities.User;
 import app.core.loginManager.ClientType;
 
 public class AuthorizationFilter implements Filter {
+
+	private JwtUtil jwtUtil;
+
+	public AuthorizationFilter(JwtUtil jwtUtil) {
+		super();
+		this.jwtUtil = jwtUtil;
+	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -29,20 +38,24 @@ public class AuthorizationFilter implements Filter {
 			chain.doFilter(request, response);
 		} else {
 			String requestUri = httpRequest.getRequestURI();
-			User user = (User) httpRequest.getAttribute("user");
+			String authorization = httpRequest.getHeader("Authorization");
+			StringTokenizer tokenizer = new StringTokenizer(authorization);
+			String scheme = tokenizer.nextToken(); // Bearer
+			String token = tokenizer.nextToken(); // JWT:
+			ClientType clientType = this.jwtUtil.extractClientType(token);
 			
 
-			if (requestUri.contains("/api/admin") && user.getClientType() != ClientType.ADMIN) {
+			if (requestUri.contains("/api/admin") && clientType != ClientType.ADMIN) {
 				httpResponse.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // for CORS
 				httpResponse.setHeader("WWW-Authenticate", "Bearer realm=\"ADMIN API\"");
 				httpResponse.setHeader("Access-Control-Expose-Headers", "*");
 				httpResponse.sendError(HttpStatus.FORBIDDEN.value(), "Only Admin can access this zone!");
-			} else if (requestUri.contains("/api/company") && user.getClientType() != ClientType.COMPANY) {
+			} else if (requestUri.contains("/api/company") && clientType != ClientType.COMPANY) {
 				httpResponse.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // for CORS
 				httpResponse.setHeader("WWW-Authenticate", "Bearer realm=\"COMPANY API\"");
 				httpResponse.setHeader("Access-Control-Expose-Headers", "*");
 				httpResponse.sendError(HttpStatus.FORBIDDEN.value(), "Only Company can access this zone!");
-			} else if (requestUri.contains("/api/customer") && user.getClientType() != ClientType.CUSTOMER) {
+			} else if (requestUri.contains("/api/customer") && clientType != ClientType.CUSTOMER) {
 				httpResponse.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // for CORS
 				httpResponse.setHeader("WWW-Authenticate", "Bearer realm=\"CUSTOMER API\"");
 				httpResponse.setHeader("Access-Control-Expose-Headers", "*");

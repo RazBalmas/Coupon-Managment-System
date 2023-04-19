@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
+import app.core.entities.Admin;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
@@ -31,6 +33,12 @@ public class CompanyController {
 	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCompany(HttpServletRequest req,@RequestBody Company company) {
 		try {
+			Company unUpdatedCompany = (Company) req.getAttribute("user");
+	
+			if (unUpdatedCompany.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+			}
+			company.setId(unUpdatedCompany.getId());
 			companyService.updateCompany(company);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -40,6 +48,12 @@ public class CompanyController {
 	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public int addCoupon(HttpServletRequest req,@RequestBody Coupon coupon)  {
 		try {
+			Company company = (Company) req.getAttribute("user");
+			
+			if (company.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+			}
+			coupon.setCompany(company);
 			return companyService.addCoupon(coupon);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -49,6 +63,12 @@ public class CompanyController {
 	@PutMapping(path ="/updateCoupon", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCoupon(HttpServletRequest req,@RequestParam Coupon coupon) {
 		try {
+			Company company = (Company) req.getAttribute("user");
+			
+			if (company.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+			}
+			coupon.setCompany(company);
 			companyService.updateCoupon(coupon);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -58,7 +78,18 @@ public class CompanyController {
 	@DeleteMapping(path = "/deleteCoupon" , headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCoupon(HttpServletRequest req,@RequestParam int coupon_id) {
 		try {
-			companyService.deleteCoupon(coupon_id);
+			Company company = (Company) req.getAttribute("user");
+			
+			if (company.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+			}
+			List<Coupon> comapnyCoupons = company.getCoupons();
+			for(Coupon coupon : comapnyCoupons) {
+				if (coupon.getId() == coupon_id) {
+					companyService.deleteCoupon(coupon_id);
+				break;
+				}
+			}
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -67,9 +98,14 @@ public class CompanyController {
 	
 	
 	@GetMapping(path ="/allMyCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> findCouponsByCompany_Id(HttpServletRequest req,@RequestParam int company_id) {
+	public List<Coupon> findCouponsByCompany_Id(HttpServletRequest req) {
 		try {
-			return (companyService.findCouponsByCompany_Id(company_id));
+			Company company = (Company) req.getAttribute("user");
+			
+			if (company.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+			}
+			return (companyService.findCouponsByCompany_Id(company.getId()));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 			
