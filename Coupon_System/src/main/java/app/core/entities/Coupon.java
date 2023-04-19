@@ -19,7 +19,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +43,7 @@ public class Coupon {
 
 	private double price;
 
+	
 //	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDate startDate;
 
@@ -56,6 +59,7 @@ public class Coupon {
 	@Enumerated(EnumType.STRING)
 	private Catagory catagory;
 	
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 	    name = "Customer_Coupons",
@@ -63,6 +67,7 @@ public class Coupon {
 	    inverseJoinColumns = @JoinColumn(name = "Customer_id"))
 	private List<Customer> customerList;
 	
+	@JsonIgnore
 	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn (name = "Company_id", nullable = false)
 	private Company company;

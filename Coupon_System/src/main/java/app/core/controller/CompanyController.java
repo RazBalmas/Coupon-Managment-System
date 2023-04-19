@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,7 +47,8 @@ public class CompanyController {
 		}
 	}
 
-	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION)
+	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION, produces = MediaType.APPLICATION_JSON_VALUE)
+	
 	public int addCoupon(HttpServletRequest req,@RequestBody Coupon coupon)  {
 		try {
 			Company company = (Company) req.getAttribute("COMPANY");

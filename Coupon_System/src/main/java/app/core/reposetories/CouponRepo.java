@@ -18,6 +18,8 @@ public interface CouponRepo extends JpaRepository<Coupon, Integer> {
 	List<Coupon> findByCompany_Id(int company_id) throws CouponSystemException;
 
 	Coupon findByCatagory(Catagory catagory);
+	
+	List<Coupon> findCouponByCompany_Id(int id);
 
 	
 }

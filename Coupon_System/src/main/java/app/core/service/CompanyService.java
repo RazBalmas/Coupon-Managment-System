@@ -130,14 +130,14 @@ public class CompanyService extends ClientService{
 
 	public List<Coupon> findCouponsByCompany_Id(int company_id) throws CouponSystemException {
 
-		List<Coupon> all_coupons = coupon_repo.findAll();
-		List<Coupon> company_coupons = new ArrayList<>();
-		for (Coupon coupon : all_coupons) {
-			if (coupon.getCompany().getId() == company_id) {
-				company_coupons.add(coupon);
-			}
-		}
-		return company_coupons;
+		List<Coupon> all_coupons = coupon_repo.findCouponByCompany_Id(company_id);
+//		List<Coupon> company_coupons = new ArrayList<>();
+//		for (Coupon coupon : all_coupons) {
+//			if (coupon.getCompany().getId() == company_id) {
+//				company_coupons.add(coupon);
+//			}
+//		}
+		return all_coupons;
 	}
 	
 

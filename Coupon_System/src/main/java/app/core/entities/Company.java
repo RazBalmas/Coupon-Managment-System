@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import app.core.loginManager.ClientType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,6 +49,7 @@ public class Company extends User{
 
 	@Enumerated(EnumType.STRING)
 	private final ClientType clientType = ClientType.COMPANY;
+
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	@Nullable
