@@ -4,7 +4,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-
 import app.core.auth.JwtUtil;
 import app.core.filters.AuthenticationFilter;
 import app.core.filters.AuthorizationFilter;
@@ -15,12 +14,13 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @SpringBootApplication
-//@ComponentScan
+
 public class CouponCompanyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CouponCompanyApplication.class, args);
 	}
+
 	
 	@Bean
 	OpenAPI customOpenAPI() {

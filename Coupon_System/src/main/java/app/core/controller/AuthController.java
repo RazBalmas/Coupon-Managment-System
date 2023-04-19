@@ -2,7 +2,7 @@ package app.core.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 import app.core.auth.UserCredentials;
 import app.core.entities.User;
 import app.core.exceptions.CouponSystemException;
-import app.core.exceptions.LoginException;
-import app.core.reposetories.CompanyRepo;
-import app.core.reposetories.CustomerRepo;
 import app.core.service.AuthService;
 
 @CrossOrigin

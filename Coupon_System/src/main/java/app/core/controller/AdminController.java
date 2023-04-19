@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
-import app.core.entities.Admin;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
@@ -36,11 +35,6 @@ public class AdminController {
 	@GetMapping(path = "/companyExistsById", headers = HttpHeaders.AUTHORIZATION)
 	public boolean companyExistsById(HttpServletRequest req, @RequestParam int companyId) {
 		try {
-			Admin admin = (Admin) req.getAttribute("user");
-	
-			if (admin.equals(null)) {
-				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-			}
 			return (adminService.companyExistsById(Integer.parseInt(req.getAttribute("companyId").toString())));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -49,10 +43,6 @@ public class AdminController {
 
 	@GetMapping(path = "/companyExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
 	public boolean companyExistsByEmail(HttpServletRequest req, @RequestParam String email) {
-		Admin admin = (Admin) req.getAttribute("user");
-		if (admin.equals(null)) {
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-		}
 		try {
 			return (adminService.companyExistsByEmail(email));
 		} catch (CouponSystemException e) {
@@ -63,11 +53,7 @@ public class AdminController {
 
 	@PostMapping(path = "/addCompany", headers = HttpHeaders.AUTHORIZATION, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public int addCompany(HttpServletRequest req, @RequestBody Company company) {
-		Admin admin = (Admin) req.getAttribute("user");
-		if (admin.equals(null)) {
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-		}
-		try {
+			try {
 			return adminService.addCompany(company);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -76,11 +62,7 @@ public class AdminController {
 
 	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCompany(HttpServletRequest req, @RequestBody Company company) {
-		Admin admin = (Admin) req.getAttribute("user");
-		if (admin.equals(null)) {
-			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-		}
-		try {
+				try {
 			adminService.updateCompany(company);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -90,13 +72,6 @@ public class AdminController {
 	@DeleteMapping(path = "/deleteCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void deleteCompany(HttpServletRequest req, @RequestParam int companyId) {
 		try {
-			
-				Admin admin = (Admin) req.getAttribute("user");
-		
-				if (admin.equals(null)) {
-					throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-				}
-
 			adminService.deleteCompany(companyId);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -106,11 +81,6 @@ public class AdminController {
 	@GetMapping(path = "/getAllCompany", headers = HttpHeaders.AUTHORIZATION)
 	public List<Company> getAllCompanies(HttpServletRequest req) {
 		try {
-			Admin admin = (Admin) req.getAttribute("user");
-	
-			if (admin.equals(null)) {
-				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-			}
 		List<Company> companies = adminService.getAllCompanies();
 		return companies;
 		}catch (Exception e) {
@@ -122,14 +92,7 @@ public class AdminController {
 	public Company findByCompanyId(HttpServletRequest req, @RequestParam int id) {
 
 		try {
-			
-				Admin admin = (Admin) req.getAttribute("user");
-		
-				if (admin.equals(null)) {
-					throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-				}
-
-			return (adminService.findByCompanyId(id));
+					return (adminService.findByCompanyId(id));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -139,12 +102,6 @@ public class AdminController {
 	public Company findByCompanyEmailCompany(HttpServletRequest req, @RequestParam String email) {
 
 		try {
-				Admin admin = (Admin) req.getAttribute("user");
-		
-				if (admin.equals(null)) {
-					throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-				}
-
 			return (adminService.findByCompanyEmail(email));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -155,13 +112,6 @@ public class AdminController {
 	public void addCoupon(HttpServletRequest req, @RequestBody Coupon coupon) {
 
 		try {
-			
-				Admin admin = (Admin) req.getAttribute("user");
-		
-				if (admin.equals(null)) {
-					throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-				}
-
 			adminService.addCoupon(coupon);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -172,14 +122,7 @@ public class AdminController {
 	public void updateCoupon(HttpServletRequest req, @RequestBody Coupon coupon) {
 
 		try {
-			
-				Admin admin = (Admin) req.getAttribute("user");
-		
-				if (admin.equals(null)) {
-					throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
-				}
-
-			adminService.updateCoupon(coupon);
+				adminService.updateCoupon(coupon);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}

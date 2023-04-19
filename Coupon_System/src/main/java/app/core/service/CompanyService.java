@@ -19,7 +19,6 @@ import app.core.reposetories.CouponRepo;
 @Service
 @Scope("prototype")
 @Transactional
-//@Qualifier("CompanyService")
 public class CompanyService extends ClientService{
 
 	@Autowired
@@ -59,7 +58,7 @@ public class CompanyService extends ClientService{
 	}
 
 	public void updateCompany(Company company) throws CouponSystemException {
-		if (companyExistsByEmail(company.getEmail())) {
+		if (companyExistsById(company.getId())) {
 			company_repo.save(company);
 		} else
 			throw new CouponSystemException("Company was not found in DataBase to Update.");

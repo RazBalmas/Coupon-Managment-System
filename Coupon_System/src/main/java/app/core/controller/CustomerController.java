@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import app.core.entities.Catagory;
+import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
@@ -33,28 +35,42 @@ public class CustomerController{
 	@Autowired
 	public CouponService couponService;
 		
-	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
-		public int addCustomer(HttpServletRequest req,@RequestBody Customer customer) {
-				int customerId = customerService.addCustomer(customer);
-				if (customerId == 0) {
-					throw new ResponseStatusException(HttpStatus.BAD_REQUEST);		
-				}
-				return customerId;
-					}
+//	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
+//		public int addCustomer(HttpServletRequest req,@RequestBody Customer customer) {
+//		
+//				int customerId = customerService.addCustomer(customer);
+//				if (customerId == 0) {
+//					throw new ResponseStatusException(HttpStatus.BAD_REQUEST);		
+//				}
+//				return customerId;
+//					}
 	
 	
 	@PutMapping(path ="/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCustomer(HttpServletRequest req,@RequestBody Customer customer) {
+		try {
+			Customer unUpdatedCustomer = (Customer) req.getAttribute("CUSTOMER");
+			if (unUpdatedCustomer.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Company");
+			}
+			customer.setId(unUpdatedCustomer.getId());
 			customerService.updateCustomer(customer);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 	}
 	
 
 	@GetMapping(path ="/customerCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> getCustomerCoupons(HttpServletRequest req, @RequestParam int customerID){
+	public List<Coupon> getCustomerCoupons(HttpServletRequest req){
 
 			try {
-				return customerService.getCustomerCoupons(customerID);
+				Customer customer = (Customer) req.getAttribute("CUSTOMER");
+				if (customer.equals(null)) {
+					throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Company");
+				}
+				return customerService.getCustomerCoupons(customer.getId());
 			} catch (CouponSystemException e) {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());	
 			}

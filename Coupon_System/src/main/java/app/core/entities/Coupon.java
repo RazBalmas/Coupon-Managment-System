@@ -1,5 +1,6 @@
 package app.core.entities;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,17 +14,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
+
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @AllArgsConstructor
@@ -40,8 +41,10 @@ public class Coupon {
 
 	private double price;
 
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDate startDate;
 
+//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDate endDate;
 
 	private String title;
@@ -106,4 +109,18 @@ public class Coupon {
 				+ ", catagory =" + catagory + "]";
 	}
 	
+	public void setStartDate(String date) {
+		LocalDate localDate = Date.valueOf(date).toLocalDate();
+		this.startDate = localDate;
+	}
+	public void setStartDate(LocalDate date) {
+		this.startDate = date;
+	}
+	public void setEndtDate(String date) {
+		LocalDate localDate = Date.valueOf(date).toLocalDate();
+		this.endDate = localDate;
+	}
+	public void setEndtDate(LocalDate date) {
+		this.endDate = date;
+	}
 }

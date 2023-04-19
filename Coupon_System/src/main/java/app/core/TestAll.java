@@ -1,5 +1,18 @@
 //package app.core;
 //
+
+//<dependency>
+//    <groupId>com.fasterxml.jackson.core</groupId>
+//    <artifactId>jackson-databind</artifactId>
+//    <version>2.12.0</version>
+//</dependency>
+//<dependency>
+//    <groupId>com.fasterxml.jackson.core</groupId>
+//    <artifactId>jackson-core</artifactId>
+//    <version>2.15.0-rc2</version>
+//</dependency>
+
+
 //import java.util.ArrayList;
 //import java.util.List;
 //
