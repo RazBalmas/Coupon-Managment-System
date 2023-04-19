@@ -2,91 +2,119 @@ package app.core.controller;
 
 import java.util.List;
 
-import org.apache.tomcat.util.http.parser.Authorization;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
+import app.core.entities.Admin;
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.service.AdminService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/api/admin")
-public class AdminController{
+public class AdminController {
 
 	@Autowired
 	public AdminService adminService;
 
+	@GetMapping(path = "/bbb", headers = HttpHeaders.AUTHORIZATION)
+	public String hi() {
+		return "HI";
+	}
+
 	@GetMapping(path = "/companyExistsById", headers = HttpHeaders.AUTHORIZATION)
-	public boolean companyExistsById(int id) {
-	
+	public boolean companyExistsById(HttpServletRequest req, @RequestParam int companyId) {
 		try {
-			return (adminService.companyExistsById(id));
+//			return (adminService.companyExistsById(Integer.parseInt(req.getAttribute("companyId").toString())));
+			Admin admin = (Admin) req.getAttribute("user");
+			// String x = req.getParameter("x");
+			if (admin.equals(null)) {
+				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+			}
+			return (adminService.companyExistsById(Integer.parseInt(req.getAttribute("companyId").toString())));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
+
 	@GetMapping(path = "/companyExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
-	public boolean companyExistsByEmail(@RequestParam String email) {
-		try {
-		return (adminService.companyExistsByEmail(email));
-	} catch (CouponSystemException e) {
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-		
-			}}
-	
-	
-	@PostMapping(path = "/addCompany",headers = HttpHeaders.AUTHORIZATION)
-	public int addCompany(@RequestBody Company company) {
-		try {
-			return (adminService.addCompany(company));
+	public boolean companyExistsByEmail(HttpServletRequest req, @RequestParam String email) {
+		Admin admin = (Admin) req.getAttribute("user");
+		// String x = req.getParameter("x");
+		if (admin.equals(null)) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
 		}
-		catch (CouponSystemException e) {
+		try {
+			return (adminService.companyExistsByEmail(email));
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+
+		}
+	}
+
+	@PostMapping(path = "/addCompany", headers = HttpHeaders.AUTHORIZATION, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public int addCompany(HttpServletRequest req, @RequestBody Company company) {
+		Admin admin = (Admin) req.getAttribute("user");
+		// String x = req.getParameter("x");
+		if (admin.equals(null)) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+		}
+		try {
+			return adminService.addCompany(company);
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-				}}
-	
+		}
+	}
+
 	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
-	public void updateCompany(@RequestBody Company company) {
+	public void updateCompany(HttpServletRequest req, @RequestBody Company company) {
+		Admin admin = (Admin) req.getAttribute("user");
+		// String x = req.getParameter("x");
+		if (admin.equals(null)) {
+			throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Admin");
+		}
 		try {
 			adminService.updateCompany(company);
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
-		catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());		
-		}}
-	
-	@DeleteMapping(path = "/deleteCompany", headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCompany(@RequestParam int companyId) {
-		try {
-		 adminService.deleteCompany(companyId);
-		}
-		catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());		
-		}}
+	}
 
-	@GetMapping(path ="/getAllCompany", headers = HttpHeaders.AUTHORIZATION)
-	public List<Company> getAllCompanies() {
+	@DeleteMapping(path = "/deleteCompany", headers = HttpHeaders.AUTHORIZATION)
+	public void deleteCompany(HttpServletRequest req, @RequestParam int companyId) {
+		try {
+			adminService.deleteCompany(companyId);
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}
+	}
+
+	@GetMapping(path = "/getAllCompany", headers = HttpHeaders.AUTHORIZATION)
+	public List<Company> getAllCompanies(HttpServletRequest req) {
 		List<Company> companies = adminService.getAllCompanies();
 		System.out.println(companies.toString());
 		return companies;
 	}
-	
-	@GetMapping(path ="/getCompanyById", headers = HttpHeaders.AUTHORIZATION)
-	public Company findByCompanyId(@RequestParam int id) {
-		
+
+	@GetMapping(path = "/getCompanyById", headers = HttpHeaders.AUTHORIZATION)
+	public Company findByCompanyId(HttpServletRequest req, @RequestParam int id) {
+
 		try {
 			return (adminService.findByCompanyId(id));
 		} catch (CouponSystemException e) {
@@ -94,58 +122,58 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping(path ="/getCompanyByEmail", headers = HttpHeaders.AUTHORIZATION)
-	public Company findByCompanyEmailCompany (@RequestParam String email) {
-		
+	@GetMapping(path = "/getCompanyByEmail", headers = HttpHeaders.AUTHORIZATION)
+	public Company findByCompanyEmailCompany(HttpServletRequest req, @RequestParam String email) {
+
 		try {
 			return (adminService.findByCompanyEmail(email));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
-	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION)
-	public void addCoupon(@RequestBody Coupon coupon) {
-		
+
+	@PostMapping(path = "/addCoupon", headers = HttpHeaders.AUTHORIZATION)
+	public void addCoupon(HttpServletRequest req, @RequestBody Coupon coupon) {
+
 		try {
-		adminService.addCoupon(coupon);
+			adminService.addCoupon(coupon);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
 	@PutMapping(path = "/updateCoupon", headers = HttpHeaders.AUTHORIZATION)
-	public void updateCoupon(@RequestBody Coupon coupon) {
-		
+	public void updateCoupon(HttpServletRequest req, @RequestBody Coupon coupon) {
+
 		try {
 			adminService.updateCoupon(coupon);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
-	@DeleteMapping(path ="/deleteCoupon", headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCoupon(@RequestParam int coupon_id) {
-		
+
+	@DeleteMapping(path = "/deleteCoupon", headers = HttpHeaders.AUTHORIZATION)
+	public void deleteCoupon(HttpServletRequest req, @RequestParam int coupon_id) {
+
 		try {
 			adminService.deleteCoupon(coupon_id);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
+
 	@GetMapping(path = "/CouponsByCompanyId", headers = HttpHeaders.AUTHORIZATION)
-	public  List<Coupon> findCouponsByCompany_Id(@RequestParam int company_id) {
-		
+	public List<Coupon> findCouponsByCompany_Id(HttpServletRequest req, @RequestParam int company_id) {
+
 		try {
 			return (adminService.findCouponsByCompany_Id(company_id));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
-	@GetMapping(path ="/CouponById",headers = HttpHeaders.AUTHORIZATION)
-	public Coupon findByCouponId(int coupon_id) {
+
+	@GetMapping(path = "/CouponById", headers = HttpHeaders.AUTHORIZATION)
+	public Coupon findByCouponId(HttpServletRequest req, @RequestParam int coupon_id) {
 		try {
 			return (adminService.findByCouponId(coupon_id));
 		} catch (CouponSystemException e) {
@@ -153,122 +181,115 @@ public class AdminController{
 		}
 	}
 
-	@GetMapping(path ="/CouponByTitle", headers = HttpHeaders.AUTHORIZATION)
-	public Coupon findCouponByTitle(String title)  {
-		 Coupon coupon = adminService.findCouponByTitle(title);
-		 if (coupon != null) {
-			 return coupon;
-		 }
-		 else {
+	@GetMapping(path = "/CouponByTitle", headers = HttpHeaders.AUTHORIZATION)
+	public Coupon findCouponByTitle(HttpServletRequest req, @RequestBody String title) {
+		Coupon coupon = adminService.findCouponByTitle(title);
+		if (coupon != null) {
+			return coupon;
+		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@GetMapping(path ="/allCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public  List<Coupon> getAllCoupons() {
+	@GetMapping(path = "/allCoupons", headers = HttpHeaders.AUTHORIZATION)
+	public List<Coupon> getAllCoupons(HttpServletRequest req) {
 		return adminService.getAllCoupons();
-		}
-	
-	
-	@GetMapping(path ="/customerExistsById", headers = HttpHeaders.AUTHORIZATION)
-	public boolean CustomerExistsById(@RequestParam int Id) {
+	}
+
+	@GetMapping(path = "/customerExistsById", headers = HttpHeaders.AUTHORIZATION)
+	public boolean CustomerExistsById(HttpServletRequest req, @RequestParam int Id) {
 		try {
 			return (adminService.companyExistsById(Id));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
-	@GetMapping(path ="/customerExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
-	public boolean existsByCustomerEmail(@RequestParam String email) {
+
+	@GetMapping(path = "/customerExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
+	public boolean existsByCustomerEmail(HttpServletRequest req, @RequestParam String email) {
 		try {
 			return (adminService.companyExistsByEmail(email));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
-		}
-		
-	@PostMapping(path ="/addCustomer", headers = HttpHeaders.AUTHORIZATION)
-		public int addCustomer(@RequestBody Customer customer) {
-				int customerId = adminService.addCustomer(customer);
-				if (customerId == 0) {
-					throw new ResponseStatusException(HttpStatus.BAD_REQUEST);		
-				}
-				return customerId;
-			
-		
 	}
-	
-	@PutMapping(path ="/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
-	public void updateCustomer(@RequestBody Customer customer) {
+
+	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
+	public int addCustomer(HttpServletRequest req, @RequestBody Customer customer) {
+		int customerId = adminService.addCustomer(customer);
+		if (customerId == 0) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+		return customerId;
+
+	}
+
+	@PutMapping(path = "/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
+	public void updateCustomer(HttpServletRequest req, @RequestBody Customer customer) {
 		try {
 			adminService.updateCustomer(customer);
-		}catch (CouponSystemException e) {
+		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-				}	
+		}
 	}
-	
-	
-	@DeleteMapping(path ="/deleteCustomer", headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCustomer(@RequestParam int customerID) {
+
+	@DeleteMapping(path = "/deleteCustomer", headers = HttpHeaders.AUTHORIZATION)
+	public void deleteCustomer(HttpServletRequest req, @RequestParam int customerID) {
 		try {
 			adminService.deleteCustomer(customerID);
-		}catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());	
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
 
-	@GetMapping(path ="/allCustomers", headers = HttpHeaders.AUTHORIZATION)
+	@GetMapping(path = "/allCustomers", headers = HttpHeaders.AUTHORIZATION)
 	public List<Customer> getAllCustomers() {
-			return adminService.getAllCustomers();
+		return adminService.getAllCustomers();
 	}
-	
-	@GetMapping(path ="/customerById", headers = HttpHeaders.AUTHORIZATION)
-	public Customer findByCustomerId(@RequestParam int customerID){
+
+	@GetMapping(path = "/customerById", headers = HttpHeaders.AUTHORIZATION)
+	public Customer findByCustomerId(HttpServletRequest req, @RequestParam int customerID) {
 		try {
 			return adminService.findByCustomerId(customerID);
-		}catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());	
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
-	@GetMapping(path ="/customerByEmail", headers = HttpHeaders.AUTHORIZATION)
-	public  Customer findByCustomerEmail(@RequestParam String email){
+
+	@GetMapping(path = "/customerByEmail", headers = HttpHeaders.AUTHORIZATION)
+	public Customer findByCustomerEmail(HttpServletRequest req, @RequestParam String email) {
 		try {
 			return adminService.findByCustomerEmail(email);
-		}catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());	
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
 
-	@GetMapping(path ="/customerCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> getCustomerCoupons(int customerID){
+	@GetMapping(path = "/customerCoupons", headers = HttpHeaders.AUTHORIZATION)
+	public List<Coupon> getCustomerCoupons(HttpServletRequest req, @RequestParam int customerID) {
 		try {
 			return adminService.getCustomerCoupons(customerID);
-		}catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());	
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}
-	
+
 	@PostMapping(path = "/addPurches", headers = HttpHeaders.AUTHORIZATION)
-	public void addCouponPurchase(@RequestParam int customerID,@RequestParam int couponID) {
+	public void addCouponPurchase(HttpServletRequest req, @RequestParam int customerID, @RequestParam int couponID) {
 		try {
-		 adminService.addCouponPurchase(customerID, couponID);
-		}catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());	
+			adminService.addCouponPurchase(customerID, couponID);
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
+
 	@DeleteMapping(path = "/deletePurches", headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCouponPurchase(int customerID, int couponID) {
+	public void deleteCouponPurchase(HttpServletRequest req, int customerID, int couponID) {
 		try {
 			adminService.deleteCouponPurchase(customerID, couponID);
-		}catch (CouponSystemException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());	
+		} catch (CouponSystemException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
-	
-	
-}
-	
 
+}

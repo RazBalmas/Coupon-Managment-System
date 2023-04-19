@@ -26,8 +26,6 @@ public class CompanyService extends ClientService{
 	private CompanyRepo company_repo;
 	@Autowired
 	private CouponRepo coupon_repo;
-	
-	private int id;
 
 	/////////////////////////////////////////////////////////////////////////////////
 
@@ -39,7 +37,6 @@ public class CompanyService extends ClientService{
 	public boolean login(String email, String password) {
 		try {
 			if (findByCompanyEmail(email).getPassword().equals(password)) {
-				this.id = findByCompanyEmail(email).getId();
 				return true;
 			}
 		} catch (CouponSystemException e) {

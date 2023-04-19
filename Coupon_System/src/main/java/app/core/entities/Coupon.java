@@ -55,10 +55,10 @@ public class Coupon {
 	
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
-	    name = "User_Coupons",
+	    name = "Customer_Coupons",
 	    joinColumns = @JoinColumn(name = "coupon_id"),
-	    inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private List<User> userList;
+	    inverseJoinColumns = @JoinColumn(name = "Customer_id"))
+	private List<Customer> customerList;
 	
 	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn (name = "Company_id", nullable = false)

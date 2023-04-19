@@ -2,6 +2,8 @@ package app.core.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,7 @@ public class CustomerController{
 	public CouponService couponService;
 		
 	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
-		public int addCustomer(@RequestBody Customer customer) {
+		public int addCustomer(HttpServletRequest req,@RequestBody Customer customer) {
 				int customerId = customerService.addCustomer(customer);
 				if (customerId == 0) {
 					throw new ResponseStatusException(HttpStatus.BAD_REQUEST);		
@@ -42,14 +44,14 @@ public class CustomerController{
 	
 	
 	@PutMapping(path ="/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
-	public void updateCustomer(@RequestBody Customer customer) {
+	public void updateCustomer(HttpServletRequest req,@RequestBody Customer customer) {
 			customerService.updateCustomer(customer);
 		
 	}
 	
 
 	@GetMapping(path ="/customerCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> getCustomerCoupons(int customerID){
+	public List<Coupon> getCustomerCoupons(HttpServletRequest req, @RequestParam int customerID){
 
 			try {
 				return customerService.getCustomerCoupons(customerID);
@@ -59,7 +61,7 @@ public class CustomerController{
 			}
 	
 	@PostMapping(path = "/addPurches", headers = HttpHeaders.AUTHORIZATION)
-	public void addCouponPurchase(@RequestParam int customerID,@RequestParam int couponID) {
+	public void addCouponPurchase(HttpServletRequest req,@RequestParam int customerID,@RequestParam int couponID) {
 		try {
 		 customerService.addCouponPurchase(customerID, couponID);
 		}catch (CouponSystemException e) {
@@ -68,7 +70,7 @@ public class CustomerController{
 	}
 	
 	@DeleteMapping(path ="/deletePurches", headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCouponPurchase(@RequestParam int customerID,@RequestParam int couponID) {
+	public void deleteCouponPurchase(HttpServletRequest req,@RequestParam int customerID,@RequestParam int couponID) {
 		try {
 			customerService.deleteCouponPurchase(customerID, couponID);
 		}catch (CouponSystemException e) {
@@ -77,7 +79,7 @@ public class CustomerController{
 	}
 	
 	@GetMapping(path ="/findCouponById", headers = HttpHeaders.AUTHORIZATION)
-	public Coupon findByCouponId(@RequestParam int coupon_id){
+	public Coupon findByCouponId(HttpServletRequest req,@RequestParam int coupon_id){
 		
 		try {
 			return couponService.findByCouponId(coupon_id);
@@ -87,12 +89,12 @@ public class CustomerController{
 	}
 	
 	@GetMapping(path ="/findCouponByCatagory", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> findCouponByCatagory(@PathVariable Catagory catagory){
+	public List<Coupon> findCouponByCatagory(HttpServletRequest req,@PathVariable Catagory catagory){
 			return couponService.findCouponByCatagory(catagory);
 		} 
 
 	@GetMapping(path ="/allCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> getAllCoupons(){
+	public List<Coupon> getAllCoupons(HttpServletRequest req){
 		return couponService.getAllCoupons();
 	} 
 	

@@ -14,7 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 
 import app.core.auth.JwtUtil;
+import app.core.entities.Admin;
+import app.core.entities.Company;
+import app.core.entities.Customer;
 import app.core.entities.User;
+import app.core.loginManager.ClientType;
 
 public class AuthenticationFilter implements Filter {
 
@@ -41,15 +45,31 @@ public class AuthenticationFilter implements Filter {
 				String authorization = httpRequest.getHeader("Authorization");
 				StringTokenizer tokenizer = new StringTokenizer(authorization);
 				String scheme = tokenizer.nextToken(); // Bearer
-				String token = tokenizer.nextToken(); // the JWT: aaa.bbb.ccc
+				String token = tokenizer.nextToken(); // JWT:
+				
 				System.out.println("---------- " + scheme);
-				User user = this.jwtUtil.extractUser(token);
-				System.out.println("--- " + user);
-				httpRequest.setAttribute("user", user);
-				// 2. pass the request on
-				chain.doFilter(request, response);
+				ClientType clientType = this.jwtUtil.extractClientType(token);
+				switch(clientType) {
+				case ADMIN: 
+					Admin admin = this.jwtUtil.extractAdmin(token);
+					httpRequest.setAttribute("ADMIN", admin);
+					break;
+					
+				case COMPANY:
+					Company company = this.jwtUtil.extractCompany(token);
+					httpRequest.setAttribute("COMPANY", company);
+					break;
+					
+				case CUSTOMER:
+					Customer customer = this.jwtUtil.extractCustomer(token);
+					httpRequest.setAttribute("CUSTOMER", customer);
+					break;
+					
+				}
+				chain.doFilter(httpRequest, response);
+
 			} catch (Exception e) {
-				// 2. OR block the request
+				// 2. block the request
 				System.out.println("--- invalid token: " + e);
 				HttpServletResponse resp = (HttpServletResponse) response;
 				resp.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // for CORS
@@ -69,9 +89,6 @@ public class AuthenticationFilter implements Filter {
 				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "You need to login - " + e.getMessage());
 			}
 		}
-
-		// 3. some more actions if needed
-		System.out.println("--- authentication filter is done");
 	}
 
 }

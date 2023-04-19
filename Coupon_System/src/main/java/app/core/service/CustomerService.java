@@ -35,8 +35,6 @@ public class CustomerService extends ClientService{
 	@Autowired
 	private CouponRepo coupon_repo;
 
-	private int id;
-
 	/////////////////////////////////////////////////////////////////////////////////
 
 //										Customer
@@ -49,7 +47,6 @@ public class CustomerService extends ClientService{
 	public boolean login(String email, String password) {
 		try {
 			if (findByCustomerEmail(email).getPassword().equals(password)) {
-				this.id = findByCustomerEmail(email).getId();
 				return true;
 			}
 		} catch (CouponSystemException e) {

@@ -65,11 +65,11 @@ public class AdminService extends ClientService{
 	}
 
 	public int addCompany(Company company) throws CouponSystemException {
-		if (companyExistsByEmail(company.getEmail()) == false) {
+		if (!companyExistsByEmail(company.getEmail())) {
 			Company updatedCompany = company_repo.save(company);
 			return updatedCompany.getId();
 		}
-		return 0;
+		return -1;
 	}
 
 	public void updateCompany(Company company) throws CouponSystemException {

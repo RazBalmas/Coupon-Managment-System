@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Admin extends User {
+public final class Admin extends User{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private final int id = 1;
+	private int id;
 	
     @Column(unique = true)
 	private final String email = "admin@admin.com"; 

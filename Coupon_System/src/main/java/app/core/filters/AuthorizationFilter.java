@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 
-import app.core.entities.Catagory;
 import app.core.entities.User;
 import app.core.loginManager.ClientType;
 
@@ -24,7 +23,6 @@ public class AuthorizationFilter implements Filter {
 		System.out.println("=== Authorization filter started");
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-
 		// to handle pre-flight requests in case of cross-origin situations
 		if (httpRequest.getMethod().equalsIgnoreCase("options")) {
 			System.out.println("=== PREFLIGHT (Authorization filter)");
@@ -32,7 +30,7 @@ public class AuthorizationFilter implements Filter {
 		} else {
 			String requestUri = httpRequest.getRequestURI();
 			User user = (User) httpRequest.getAttribute("user");
-			System.out.println("=== Authorization filter - request uri: " + requestUri);
+			
 
 			if (requestUri.contains("/api/admin") && user.getClientType() != ClientType.ADMIN) {
 				httpResponse.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // for CORS

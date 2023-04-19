@@ -2,6 +2,8 @@ package app.core.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,7 @@ public class CompanyController {
 	public CompanyService companyService;
 
 	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
-	public void updateCompany(@RequestBody Company company) {
+	public void updateCompany(HttpServletRequest req,@RequestBody Company company) {
 		try {
 			companyService.updateCompany(company);
 		} catch (CouponSystemException e) {
@@ -36,7 +38,7 @@ public class CompanyController {
 	}
 
 	@PostMapping(path ="/addCoupon", headers = HttpHeaders.AUTHORIZATION)
-	public int addCoupon(@RequestBody Coupon coupon)  {
+	public int addCoupon(HttpServletRequest req,@RequestBody Coupon coupon)  {
 		try {
 			return companyService.addCoupon(coupon);
 		} catch (CouponSystemException e) {
@@ -45,7 +47,7 @@ public class CompanyController {
 	}
 	
 	@PutMapping(path ="/updateCoupon", headers = HttpHeaders.AUTHORIZATION)
-	public void updateCoupon(@RequestParam Coupon coupon) {
+	public void updateCoupon(HttpServletRequest req,@RequestParam Coupon coupon) {
 		try {
 			companyService.updateCoupon(coupon);
 		} catch (CouponSystemException e) {
@@ -54,7 +56,7 @@ public class CompanyController {
 	}
 	
 	@DeleteMapping(path = "/deleteCoupon" , headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCoupon(@RequestParam int coupon_id) {
+	public void deleteCoupon(HttpServletRequest req,@RequestParam int coupon_id) {
 		try {
 			companyService.deleteCoupon(coupon_id);
 		} catch (CouponSystemException e) {
@@ -63,8 +65,9 @@ public class CompanyController {
 	}
 
 	
+	
 	@GetMapping(path ="/allMyCoupons", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> findCouponsByCompany_Id(@RequestParam int company_id) {
+	public List<Coupon> findCouponsByCompany_Id(HttpServletRequest req,@RequestParam int company_id) {
 		try {
 			return (companyService.findCouponsByCompany_Id(company_id));
 		} catch (CouponSystemException e) {

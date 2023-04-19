@@ -9,13 +9,16 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 
 import app.core.entities.Admin;
 import app.core.entities.Company;
 import app.core.entities.Customer;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
@@ -34,7 +37,7 @@ public abstract class JwtUtilAbstract<T, ID> {
 	private final String chronoUnit = ChronoUnit.MINUTES.name(); // time units
 
 //	@Value("${jwt.util.chrono.unit.number}")
-	private final long unitNumber = 5; // number of time units
+	private final long unitNumber = 30; // number of time units
 
 	private JwtParser jwtParser;
 
@@ -50,7 +53,6 @@ public abstract class JwtUtilAbstract<T, ID> {
 
 		Instant now = Instant.now();
 		Instant exp = now.plus(unitNumber, ChronoUnit.valueOf(chronoUnit));
-
 		String token = Jwts.builder()
 
 				.setClaims(claims)
@@ -65,7 +67,8 @@ public abstract class JwtUtilAbstract<T, ID> {
 				.signWith(key)
 
 				.compact();
-
+		
+		
 		return token;
 	}
 

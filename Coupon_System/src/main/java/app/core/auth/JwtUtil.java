@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -84,39 +88,45 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 		return companytoken;
 			}
 	
-	
-
-	@Override
-	public User extractUser(String token) throws JwtException {
-
+	public ClientType extractClientType(String token) {
 		Claims claims = this.extractAllClaims(token);
 		ClientType clientType = ClientType.valueOf(claims.get("clientType", String.class));
-		String userClientType = clientType.name();
-		switch (userClientType) {
-
-		case "COMPANY":
-			Company company = extractCompany(token);
-			return company;
-			
-
-		case "CUSTOMER":
-
-			return extractCustomer(token);
-
-		case "ADMIN":
-			Admin admin = Admin.getAdmin();
-			return admin;
-
-		}
-		return null;
-
+		return clientType;
 	}
+	
+//
+//	@Override
+//	public User extractUser(String token) throws JwtException {
+//
+//		Claims claims = this.extractAllClaims(token);
+//		ClientType clientType = ClientType.valueOf(claims.get("clientType", String.class));
+//		String userClientType = clientType.name();
+//		switch (userClientType) {
+//
+//		case "COMPANY":
+//			Company company = extractCompany(token);
+//			return company;
+//			
+//
+//		case "CUSTOMER":
+//
+//			return extractCustomer(token);
+//
+//		case "ADMIN":
+//			Admin admin = Admin.getAdmin();
+//			return admin;
+//
+//		}
+//		return null;
+//
+//	}
 	
 	
 	
 	public Company extractCompany(String token) {
 		Claims claims = this.extractAllClaims(token);
 		int id = Integer.parseInt(claims.getSubject());
+		ClientType clientType = ClientType.valueOf(claims.get("clientType", String.class));
 		String email = claims.get("email", String.class);
 		String name = claims.get("name", String.class);
 		String password = claims.get("password", String.class);
@@ -141,6 +151,7 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 	public Customer extractCustomer(String token) {
 		Claims claims = this.extractAllClaims(token);
 		int id = Integer.parseInt(claims.getSubject());
+		ClientType clientType = ClientType.valueOf(claims.get("clientType", String.class));
 		String email = claims.get("email", String.class);
 		String customerFirstName = claims.get("firstName", String.class);
 		String customerLastName = claims.get("lastName", String.class);
@@ -167,5 +178,11 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 		Admin admin = Admin.getAdmin();
 		return admin;
 	}
-
+	@Override
+	public User extractUser(String token) throws JwtException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }

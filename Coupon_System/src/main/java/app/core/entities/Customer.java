@@ -30,7 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Customer  extends User{
+public class Customer extends User{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
