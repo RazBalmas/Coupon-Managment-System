@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import app.core.entities.Catagory;
@@ -25,6 +26,7 @@ import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.service.CouponService;
 import app.core.service.CustomerService;
+import app.core.service.FileStorageService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
@@ -34,6 +36,8 @@ public class CustomerController{
 	public CustomerService customerService;
 	@Autowired
 	public CouponService couponService;
+	@Autowired
+	FileStorageService fileStorageService;
 		
 //	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
 //		public int addCustomer(HttpServletRequest req,@RequestBody Customer customer) {
@@ -115,7 +119,12 @@ public class CustomerController{
 	public List<Coupon> getAllCoupons(HttpServletRequest req){
 		return couponService.getAllCoupons();
 	} 
-	
+
+	@PostMapping(path = "/uploadImage")
+	public String uploadFile(@RequestParam MultipartFile file) {
+		return this.fileStorageService.storeFile(file);
+	}
+
 	
 
 }

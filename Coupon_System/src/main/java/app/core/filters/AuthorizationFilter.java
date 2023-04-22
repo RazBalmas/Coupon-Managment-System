@@ -38,6 +38,10 @@ public class AuthorizationFilter implements Filter {
 			chain.doFilter(request, response);
 		} else {
 			String requestUri = httpRequest.getRequestURI();
+			if (requestUri.contains("/api/general")) {
+				chain.doFilter(request, response);
+				
+			}
 			String authorization = httpRequest.getHeader("Authorization");
 			StringTokenizer tokenizer = new StringTokenizer(authorization);
 			String scheme = tokenizer.nextToken(); // Bearer

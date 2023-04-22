@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import app.core.entities.Company;
 import app.core.entities.Coupon;
 import app.core.exceptions.CouponSystemException;
 import app.core.service.CompanyService;
+import app.core.service.FileStorageService;
 
 
 
@@ -31,6 +33,10 @@ import app.core.service.CompanyService;
 public class CompanyController {
 	@Autowired
 	public CompanyService companyService;
+	
+	@Autowired
+	FileStorageService fileStorageService;
+	
 
 	@PutMapping(path = "/updateCompany", headers = HttpHeaders.AUTHORIZATION)
 	public void updateCompany(HttpServletRequest req,@RequestBody Company company) {
@@ -109,6 +115,11 @@ public class CompanyController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 			
 		}
+	}
+	
+	@PostMapping(path = "/uploadImage")
+	public String uploadFile(@RequestParam MultipartFile file) {
+		return this.fileStorageService.storeFile(file);
 	}
 
 }

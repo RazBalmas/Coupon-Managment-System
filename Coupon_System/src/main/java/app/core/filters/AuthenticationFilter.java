@@ -36,7 +36,7 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String requestMethod = httpRequest.getMethod();
 		// to handle pre-flight requests in case of cross-origin situations
-		if (requestMethod.equalsIgnoreCase("options")) {
+		if (requestMethod.equalsIgnoreCase("options") || httpRequest.getRequestURI().contains("/api/general")) {
 			System.out.println("--- PREFLIGHT (authentication filter)");
 			chain.doFilter(request, response);
 		} else {
@@ -72,7 +72,7 @@ public class AuthenticationFilter implements Filter {
 				// 2. block the request
 				System.out.println("--- invalid token: " + e);
 				HttpServletResponse resp = (HttpServletResponse) response;
-				resp.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // for CORS
+				resp.setHeader("Access-Control-Allow-Origin", "*"); // for CORS
 
 				// The HTTP WWW-Authenticate response header defines the HTTP authentication
 				// methods ("challenges") that might be used to gain access to a specific
@@ -86,7 +86,7 @@ public class AuthenticationFilter implements Filter {
 				// response to a cross-origin request.
 				resp.setHeader("Access-Control-Expose-Headers", "*");
 
-				resp.sendError(HttpStatus.UNAUTHORIZED.value(), "You need to login - " + e.getMessage());
+				resp.sendError(HttpStatus.UNAUTHORIZED.value(),  e.getMessage());
 			}
 		}
 	}

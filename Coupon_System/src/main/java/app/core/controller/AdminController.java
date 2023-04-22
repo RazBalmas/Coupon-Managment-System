@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import app.core.entities.Company;
@@ -24,6 +25,7 @@ import app.core.entities.Coupon;
 import app.core.entities.Customer;
 import app.core.exceptions.CouponSystemException;
 import app.core.service.AdminService;
+import app.core.service.FileStorageService;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -31,6 +33,9 @@ public class AdminController {
 
 	@Autowired
 	public AdminService adminService;
+	
+	@Autowired
+	FileStorageService fileStorageService;
 
 	@GetMapping(path = "/companyExistsById", headers = HttpHeaders.AUTHORIZATION)
 	public boolean companyExistsById(HttpServletRequest req, @RequestParam int companyId) {
@@ -260,12 +265,18 @@ public class AdminController {
 	}
 
 	@DeleteMapping(path = "/deletePurches", headers = HttpHeaders.AUTHORIZATION)
-	public void deleteCouponPurchase(HttpServletRequest req, int customerID, int couponID) {
+	public void deleteCouponPurchase(HttpServletRequest req,@RequestParam int customerID,@RequestParam int couponID) {
 		try {
 			adminService.deleteCouponPurchase(customerID, couponID);
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
 		}
 	}
+
+	@PostMapping(path = "/uploadImage")
+	public String uploadFile(@RequestParam MultipartFile file) {
+		return this.fileStorageService.storeFile(file);
+	}
+
 
 }
