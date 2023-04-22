@@ -86,13 +86,9 @@ public class CompanyController {
 			if (company.equals(null)) {
 				throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "user is not an Company");
 			}
-			List<Coupon> comapnyCoupons = company.getCoupons();
-			for(Coupon coupon : comapnyCoupons) {
-				if (coupon.getId() == coupon_id) {
 					companyService.deleteCoupon(coupon_id);
-				break;
-				}
-			}
+					return;
+			
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}

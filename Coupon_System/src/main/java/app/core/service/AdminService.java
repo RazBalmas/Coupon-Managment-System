@@ -297,8 +297,11 @@ public class AdminService extends ClientService{
 		if (couponIsValidToPurches(couponID)) {
 			
 			coupon.setCustomers(customer);
-			customer.addCoupon(coupon);
+			Coupon customerCoupon = coupon;
+			customerCoupon.setAmount(1);
+			customer.addCoupon(customerCoupon);
 			customer_repo.save(customer);
+			coupon.setAmount(coupon.getAmount() -1);
 			coupon_repo.save(coupon);
 		}
 	}

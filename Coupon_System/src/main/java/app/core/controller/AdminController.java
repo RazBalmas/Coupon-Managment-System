@@ -35,7 +35,7 @@ public class AdminController {
 	@GetMapping(path = "/companyExistsById", headers = HttpHeaders.AUTHORIZATION)
 	public boolean companyExistsById(HttpServletRequest req, @RequestParam int companyId) {
 		try {
-			return (adminService.companyExistsById(Integer.parseInt(req.getAttribute("companyId").toString())));
+			return (adminService.companyExistsById(companyId));
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
@@ -158,7 +158,7 @@ public class AdminController {
 	}
 
 	@GetMapping(path = "/CouponByTitle", headers = HttpHeaders.AUTHORIZATION)
-	public Coupon findCouponByTitle(HttpServletRequest req, @RequestBody String title) {
+	public Coupon findCouponByTitle(HttpServletRequest req, @RequestParam String title) {
 		Coupon coupon = adminService.findCouponByTitle(title);
 		if (coupon != null) {
 			return coupon;
@@ -184,8 +184,8 @@ public class AdminController {
 	@GetMapping(path = "/customerExistsByEmail", headers = HttpHeaders.AUTHORIZATION)
 	public boolean existsByCustomerEmail(HttpServletRequest req, @RequestParam String email) {
 		try {
-			return (adminService.companyExistsByEmail(email));
-		} catch (CouponSystemException e) {
+			return (adminService.existsByCustomerEmail(email));
+		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		}
 	}

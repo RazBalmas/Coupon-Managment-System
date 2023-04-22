@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 
 import org.springframework.lang.Nullable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import app.core.loginManager.ClientType;
@@ -50,7 +51,7 @@ public class Company extends User{
 	@Enumerated(EnumType.STRING)
 	private final ClientType clientType = ClientType.COMPANY;
 
-
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "company")
 	@Nullable
 	private List<Coupon> coupons;

@@ -22,7 +22,10 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import app.core.utils.LocalDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,10 +47,11 @@ public class Coupon {
 	private double price;
 
 	
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate startDate;
 
-//	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate endDate;
 
 	private String title;
@@ -59,19 +63,12 @@ public class Coupon {
 	@Enumerated(EnumType.STRING)
 	private Catagory catagory;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-	    name = "Customer_Coupons",
-	    joinColumns = @JoinColumn(name = "coupon_id"),
-	    inverseJoinColumns = @JoinColumn(name = "Customer_id"))
-	private List<Customer> customerList;
-	
-	@JsonIgnore
 	@ManyToOne (fetch = FetchType.LAZY)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@JoinColumn (name = "Company_id", nullable = false)
 	private Company company;
 	
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable (
 			name = "Customer_Coupons", 

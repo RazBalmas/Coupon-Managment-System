@@ -48,7 +48,8 @@ public class Customer extends User{
 	@Enumerated (EnumType.STRING)
 	private final ClientType clientType = ClientType.CUSTOMER;
 
-	@ManyToMany (fetch = FetchType.EAGER)
+	@ManyToMany (fetch = FetchType.LAZY)
+	
 	@JoinTable(name = "Customer_Coupons", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "coupon_id"))
 	private List<Coupon> owned_coupons;
 

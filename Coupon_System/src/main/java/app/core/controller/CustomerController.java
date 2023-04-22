@@ -98,14 +98,16 @@ public class CustomerController{
 	public Coupon findByCouponId(HttpServletRequest req,@RequestParam int coupon_id){
 		
 		try {
-			return couponService.findByCouponId(coupon_id);
+			Coupon coupon = couponService.findByCouponId(coupon_id);
+			System.out.println(coupon);
+			return coupon;
 		} catch (CouponSystemException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());	
 		}
 	}
 	
 	@GetMapping(path ="/findCouponByCatagory", headers = HttpHeaders.AUTHORIZATION)
-	public List<Coupon> findCouponByCatagory(HttpServletRequest req,@PathVariable Catagory catagory){
+	public List<Coupon> findCouponByCatagory(HttpServletRequest req,@RequestParam Catagory catagory){
 			return couponService.findCouponByCatagory(catagory);
 		} 
 
