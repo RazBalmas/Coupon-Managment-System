@@ -29,9 +29,9 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 	@Override
 	public String generateAdminToken(Admin admin) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("clientType", admin.getClientType());
 		claims.put("id", admin.getId());
 		claims.put("email", admin.getEmail());
-		claims.put("clientType", admin.getClientType());
 		claims.put("password", admin.getPassword());
 		String adminToken = this.createToken(claims, admin.getId());
 		return adminToken;
@@ -39,9 +39,9 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 	@Override
 	public String generateCustomerToken(Customer customer) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("clientType", customer.getClientType());
 		claims.put("id", customer.getId());
 		claims.put("email", customer.getEmail());
-		claims.put("clientType", customer.getClientType());
 		claims.put("password", customer.getPassword());
 		
 		claims.put("first name", customer.getFirstName());
@@ -65,9 +65,9 @@ public class JwtUtil extends JwtUtilAbstract<User, Integer> {
 	@Override
 	public String generateCompanyToken(Company company) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("clientType", company.getClientType());
 		claims.put("id", company.getId());
 		claims.put("email", company.getEmail());
-		claims.put("clientType", company.getClientType());
 		claims.put("password", company.getPassword());
 		claims.put("name", company.getName());
 		

@@ -37,17 +37,8 @@ public class CustomerController{
 	@Autowired
 	public CouponService couponService;
 	@Autowired
-	FileStorageService fileStorageService;
-		
-//	@PostMapping(path = "/addCustomer", headers = HttpHeaders.AUTHORIZATION)
-//		public int addCustomer(HttpServletRequest req,@RequestBody Customer customer) {
-//		
-//				int customerId = customerService.addCustomer(customer);
-//				if (customerId == 0) {
-//					throw new ResponseStatusException(HttpStatus.BAD_REQUEST);		
-//				}
-//				return customerId;
-//					}
+	public FileStorageService fileStorageService;
+	
 	
 	
 	@PutMapping(path ="/updateCustomer", headers = HttpHeaders.AUTHORIZATION)
